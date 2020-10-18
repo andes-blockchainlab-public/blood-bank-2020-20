@@ -7,12 +7,12 @@ const kafka = new Kafka({
 
 const producer = kafka.producer()
 
-export const initKafkaConnect = async () => {
+export const initKafkaConnect = async (): Promise<void> => {
   // Producing
   await producer.connect()
 }
 
-export const sendMessage = async (value: string) => {
+export const sendMessage = async (value: string): Promise<void> => {
   await producer.send({
     topic: 'test-topic',
     messages: [{ value }],
