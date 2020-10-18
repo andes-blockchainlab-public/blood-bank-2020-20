@@ -1,0 +1,8 @@
+#docker-compose.yml
+version: '3.3'
+services:
+  auth:
+    image: 2match-auth
+    build:
+      context: ./
+      dockerfile: ./dist/api/auth/Dockerfile
