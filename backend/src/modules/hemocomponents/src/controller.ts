@@ -42,7 +42,7 @@ export const getAllHemocomponents = async function (
   try {
     const hemocomponents = await queries.findHemocomponents()
     res.status(201).json(hemocomponents)
-    sendMessage('holi hemocomponentes')
+    sendMessage('hemocomponents', 'holi hemocomponentes')
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {

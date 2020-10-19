@@ -128,7 +128,7 @@ const _applyDec = _applyOperator('dec', (x, y) => x - y)
 let a = 1
 
 initKafkaConnect().then(() => {
-  receiveMessage(async ({ topic, partition, message }) => {
+  receiveMessage('hemocomponents', async ({ topic, partition, message }) => {
     console.log({
       topic,
       partition,

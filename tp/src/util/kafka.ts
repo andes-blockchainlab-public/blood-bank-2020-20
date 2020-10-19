@@ -6,23 +6,28 @@ const kafka = new Kafka({
 })
 
 const producer = kafka.producer()
-const consumer = kafka.consumer({ groupId: 'kafka' })
 
 export const initKafkaConnect = async () => {
   // Producing
-  await consumer.subscribe({ topic: 'test-topic', fromBeginning: true })
+  await producer.connect()
 }
 
-export const sendMessage = async (value: string) => {
+export const sendMessage = async (
+  topic: string,
+  value: string
+): Promise<void> => {
   await producer.send({
-    topic: 'test-topic',
+    topic,
     messages: [{ value }],
   })
 }
 
 export const receiveMessage = async (
+  topic: string,
   value: (payload: EachMessagePayload) => Promise<void>
 ) => {
+  const consumer = kafka.consumer({ groupId: 'kafka' })
+  await consumer.subscribe({ topic, fromBeginning: true })
   await consumer.run({
     eachMessage: value,
   })
