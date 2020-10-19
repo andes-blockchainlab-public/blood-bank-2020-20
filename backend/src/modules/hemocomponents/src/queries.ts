@@ -1,5 +1,5 @@
-import hemocomponents from './util/models/hemocomponents'
-import IHemocomponent from './util/models/IHemocomponent'
+import hemocomponents from '../util/models/hemocomponents'
+import IHemocomponent from '../util/models/IHemocomponent'
 import mongoose, { ClientSession } from 'mongoose'
 
 export const findHemocomponents = async (): Promise<IHemocomponent[]> => {

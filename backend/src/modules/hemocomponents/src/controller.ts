@@ -1,9 +1,10 @@
-import { sendMessage } from './util/kafka'
 import express from 'express'
 export const router = express.Router()
 import * as queries from './queries'
 
 import { validationErrorHandler } from './validator'
+import { sendKafkaMessage } from '../util/kafka'
+import { sendBlockchain } from './blockchain'
 
 /**
  * Hace login
@@ -20,7 +21,8 @@ export const createHemocomponent = async function (
     const bloodType = req.body.bloodType
 
     const hemocomponent = await queries.createHemocomponent({ id, bloodType })
-
+    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', hemocomponent)
+    sendBlockchain('http://localhost:4004', hemocomponent)
     res.status(200).json(hemocomponent)
   } catch (err) {
     if (!err.statusCode) {
@@ -42,7 +44,7 @@ export const getAllHemocomponents = async function (
   try {
     const hemocomponents = await queries.findHemocomponents()
     res.status(201).json(hemocomponents)
-    sendMessage('hemocomponents', 'holi hemocomponentes')
+    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', hemocomponents)
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {

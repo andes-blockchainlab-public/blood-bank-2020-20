@@ -12,9 +12,9 @@ export const initKafkaConnect = async () => {
   await producer.connect()
 }
 
-export const sendMessage = async (
+export const sendKafkaMessage = async (
   topic: string,
-  value: string
+  value: any
 ): Promise<void> => {
   await producer.send({
     topic,

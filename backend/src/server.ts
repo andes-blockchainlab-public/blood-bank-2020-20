@@ -4,7 +4,7 @@ import cors from 'cors'
 require('cross-fetch/polyfill')
 import bodyParser from 'body-parser'
 import { initDB } from './util/mongoose'
-import { initKafkaConnect } from './modules/hemocomponents/src/util/kafka'
+import { initKafkaConnect } from './modules/hemocomponents/util/kafka'
 import { router } from './routes'
 import { exceptionMiddleware } from './util/errorHandler'
 
