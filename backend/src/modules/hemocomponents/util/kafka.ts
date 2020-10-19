@@ -12,6 +12,7 @@ export const initKafkaConnect = async (): Promise<void> => {
   await producer.connect()
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendKafkaMessage = async (
   topic: string,
   value: any

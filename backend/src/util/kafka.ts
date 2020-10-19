@@ -7,7 +7,7 @@ const kafka = new Kafka({
 
 const producer = kafka.producer()
 
-export const initKafkaConnect = async () => {
+export const initKafkaConnect = async (): Promise<void> => {
   // Producing
   await producer.connect()
 }
