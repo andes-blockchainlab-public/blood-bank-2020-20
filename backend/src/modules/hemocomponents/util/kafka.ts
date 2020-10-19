@@ -26,7 +26,7 @@ export const sendKafkaMessage = async (
 export const receiveMessage = async (
   topic: string,
   value: (payload: EachMessagePayload) => Promise<void>
-) => {
+): Promise<void> => {
   const consumer = kafka.consumer({ groupId: 'kafka' })
   await consumer.subscribe({ topic, fromBeginning: true })
   await consumer.run({
