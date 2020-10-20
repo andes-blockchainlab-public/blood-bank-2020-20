@@ -2,7 +2,7 @@ import { Kafka, EachMessagePayload } from 'kafkajs'
 
 const kafka = new Kafka({
   clientId: 'kafka',
-  brokers: [process.env.DOCKER_HOST_IP + '9092'],
+  brokers: [process.env.DOCKER_HOST_IP + ':9092'],
 })
 
 const producer = kafka.producer()
