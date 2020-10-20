@@ -1,6 +1,6 @@
 import express from 'express'
 export const router = express.Router()
-import * as constants from './util/constants'
+import * as constants from '../util/constants'
 import * as queries from './queries'
 
 import {
@@ -9,9 +9,9 @@ import {
   verifyPassword,
   hashPassword,
   validateToken,
-} from './util/tokenUtils'
+} from '../util/tokenUtils'
 import { validationErrorHandler } from './validator'
-import { CustomError } from './util/errorHandler'
+import { CustomError } from '../util/errorHandler'
 
 /**
  * Hace login

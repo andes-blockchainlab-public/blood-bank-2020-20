@@ -13,6 +13,7 @@ declare global {
       NODE_ENV: 'development' | 'production' | 'verifier' | 'email'
       PRIVATE_KEY: string
       PUBLIC_KEY: string
+      DOCKER_HOST_IP: string
     }
   }
   namespace Express {

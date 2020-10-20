@@ -1,5 +1,5 @@
-import users from './util/models/users'
-import IUser from './util/models/IUser'
+import users from '../util/models/users'
+import IUser from '../util/models/IUser'
 import mongoose, { ClientSession } from 'mongoose'
 
 export const findUser = async (email): Promise<IUser | null> => {
