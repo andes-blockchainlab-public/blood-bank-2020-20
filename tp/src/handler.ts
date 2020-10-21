@@ -110,7 +110,7 @@ const _applyUpdate = (context, address, id, value) => (
 }
 /** 
 initKafkaConnect().then(() => {
-  receiveMessage('hemocomponents', async ({ topic, partition, message }) => {
+  receiveMessage('SAVED_HEMOCOMPONENT_DB', async ({ topic, partition, message }) => {
     console.log({
       topic,
       partition,
