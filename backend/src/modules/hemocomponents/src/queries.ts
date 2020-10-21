@@ -6,6 +6,13 @@ export const getObjectId = (_id: string): mongoose.Types.ObjectId => {
   return new mongoose.Types.ObjectId(_id)
 }
 
+export const findHemocomponentById = async (hemocomponent: {
+  id: string
+  bloodType: string
+}): Promise<IHemocomponent | null> => {
+  return await hemocomponents.findOne({ id: hemocomponent })
+}
+
 export const findHemocomponents = async (): Promise<IHemocomponent[]> => {
   return await hemocomponents.find().exec()
 }

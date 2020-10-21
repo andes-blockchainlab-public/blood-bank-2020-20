@@ -4,9 +4,10 @@ import * as queries from './queries'
 
 import { validationErrorHandler } from './validator'
 import { sendKafkaMessage } from '../util/kafka'
+import { CustomError } from '../util/errorHandler'
 
 /**
- * Hace login
+ * Crea un hemocomponente
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
@@ -35,7 +36,43 @@ export const createHemocomponent = async function (
 }
 
 /**
- * Hace login
+ * Actualiza un hemocomponente
+ * @param req.body.email email del usuario
+ * @param req.body.password contraseña del usuario
+ */
+export const updateHemocomponent = async function (
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  validationErrorHandler(req)
+  try {
+    const id = req.body.id
+    const bloodType = req.body.bloodType
+
+    let hemocomponent = await queries.findHemocomponentById(id)
+    if (!hemocomponent) {
+      throw new CustomError('No se encuentra el hemocomponente con ese id', 404)
+    }
+    hemocomponent.bloodType = bloodType
+    hemocomponent.savedInBlockchain = false
+    hemocomponent = await hemocomponent.save()
+
+    sendKafkaMessage('UPDATED_HEMOCOMPONENT_DB', {
+      owner: req.user?.email,
+      ...hemocomponent.toObject(),
+    })
+
+    res.status(200).json(hemocomponent)
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    throw err
+  }
+}
+
+/**
+ * Busca todos los hemocomponentes
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */

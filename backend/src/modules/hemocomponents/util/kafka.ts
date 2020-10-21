@@ -18,13 +18,11 @@ export const sendKafkaMessage = async (
   topic: string,
   payload: any
 ): Promise<void> => {
-  console.log('payload to send', payload)
   if (payload._id) {
     payload._id = payload._id.toString()
   }
   const value = cbor.encode(JSON.parse(JSON.stringify(payload)))
   console.log('value to send', value)
-  console.log('topic', topic)
   await producer.send({
     topic,
     messages: [{ value }],

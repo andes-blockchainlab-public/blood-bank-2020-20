@@ -21,6 +21,7 @@ const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 export const sendBlockchain = (method: string, payload: any): void => {
   const address = INT_KEY_NAMESPACE + '001' + hash(payload?._id, 61)
   console.log('address send bc', address)
+  console.log('object id', payload?._id)
   payload = { ...payload, lastUpdated: new Date() }
   payload = { namespace: 'Hemocomponents', Method: method, payload }
 

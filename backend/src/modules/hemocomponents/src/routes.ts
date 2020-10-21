@@ -14,3 +14,11 @@ router.post(
   verifyUser,
   exceptionHandler(hecomponent.createHemocomponent)
 )
+
+// Actualizar hemocomponente
+router.put(
+  '/',
+  validate('update'),
+  verifyUser,
+  exceptionHandler(hecomponent.updateHemocomponent)
+)

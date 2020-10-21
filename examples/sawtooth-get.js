@@ -28,7 +28,7 @@ const HOST = 'http://' + process.env.DOCKER_HOST_IP + ':8008';
 //const address = INT_KEY_NAMESPACE + hash('foo').slice(-64);
 
 const address =
-  '95861c001488ad41d3b56da95021deea44ddbc51ffd369afc03e7f38b54c31b8fdf2bd';
+  '95861c00160afa953f3108dabf2737259d8ad4e11189ef66b436c9ba04115058e04ea4';
 axios({
   method: 'get',
   url: `${HOST}/state/${address}`,

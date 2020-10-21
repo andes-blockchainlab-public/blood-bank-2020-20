@@ -15,7 +15,7 @@ const HemocomponentSchema = new Schema(
   { autoIndex }
 )
 
-HemocomponentSchema.index({ email: 1 })
+HemocomponentSchema.index({ id: 1 })
 
 HemocomponentSchema.plugin(mongoosePaginate)
 

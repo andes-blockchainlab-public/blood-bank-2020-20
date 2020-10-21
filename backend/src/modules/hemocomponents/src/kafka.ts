@@ -19,4 +19,20 @@ export const activateHemocomponentsListeners = (): void => {
       await updateObjectBlockchainStatus(obj, true)
     }
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
+
+  receiveMessage('UPDATED_HEMOCOMPONENT_DB', async (payload) => {
+    console.log('payload3', payload?.message?.value)
+    if (payload.message.value) {
+      console.log(cbor.decodeFirstSync(payload.message?.value))
+      sendBlockchain('update', cbor.decodeFirstSync(payload.message.value))
+    }
+  }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
+
+  receiveMessage('UPDATED_HEMOCOMPONENT_BC', async (payload) => {
+    console.log('payload4', payload?.message?.value)
+    if (payload.message.value) {
+      const obj = cbor.decodeFirstSync(payload.message?.value)
+      await updateObjectBlockchainStatus(obj, true)
+    }
+  }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 }
