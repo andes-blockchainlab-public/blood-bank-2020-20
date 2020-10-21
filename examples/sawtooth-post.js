@@ -1,34 +1,34 @@
-const {createContext, CryptoFactory} = require('sawtooth-sdk/signing')
+const { createContext, CryptoFactory } = require('sawtooth-sdk/signing');
 
 const axios = require('axios');
-const context = createContext('secp256k1')
-const privateKey = context.newRandomPrivateKey()
-const signer = (new CryptoFactory(context)).newSigner(privateKey)
+const context = createContext('secp256k1');
+const privateKey = context.newRandomPrivateKey();
+const signer = new CryptoFactory(context).newSigner(privateKey);
 const crypto = require('crypto');
 
-const cbor = require('cbor')
+const cbor = require('cbor');
 
-const HOST = 'http://localhost:8008';
+const HOST = 'http://' + process.env.DOCKER_HOST_IP + ':8008';
 // const HOST = 'http://192.168.99.100:30008';
 
 const hash = (x) =>
-  crypto.createHash('sha512').update(x).digest('hex').toLowerCase()
+  crypto.createHash('sha512').update(x).digest('hex').toLowerCase();
 
-const INT_KEY_FAMILY = 'intkey'
-const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY).substring(0, 6)
-const address = INT_KEY_NAMESPACE + hash('foo').slice(-64)
+const INT_KEY_FAMILY = 'intkey';
+const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY).substring(0, 6);
+const address = INT_KEY_NAMESPACE + hash('foo').slice(-64);
+console.log(address);
 
 const payload = {
   Verb: 'set',
   Name: 'foo',
-  Value: 41
-}
+  Value: 41,
+};
 
-const payloadBytes = cbor.encode(payload)
+const payloadBytes = cbor.encode(payload);
 
-const {createHash} = require('crypto')
-const {protobuf} = require('sawtooth-sdk')
-
+const { createHash } = require('crypto');
+const { protobuf } = require('sawtooth-sdk');
 
 //input and output addresses
 //const _hash = (x) =>
@@ -54,24 +54,24 @@ const transactionHeaderBytes = protobuf.TransactionHeader.encode({
   // dependencies: ['540a6803971d1880ec73a96cb97815a95d374cbad5d865925e5aa0432fcf1931539afe10310c122c5eaae15df61236079abbf4f258889359c4d175516934484a'],
   dependencies: [],
   payloadSha512: createHash('sha512').update(payloadBytes).digest('hex'),
-  nonce:"hey4"
-}).finish()
+  nonce: 'hey4',
+}).finish();
 
-let signature = signer.sign(transactionHeaderBytes)
+let signature = signer.sign(transactionHeaderBytes);
 
 const transaction = protobuf.Transaction.create({
   header: transactionHeaderBytes,
   headerSignature: signature,
-  payload: payloadBytes
-})
+  payload: payloadBytes,
+});
 
 //--------------------------------------
 //Optional
 //If sending to sign outside
 
-const txnListBytes = protobuf.TransactionList.encode({transactions:[
-  transaction
-]}).finish()
+const txnListBytes = protobuf.TransactionList.encode({
+  transactions: [transaction],
+}).finish();
 
 //const txnBytes2 = transaction.finish()
 
@@ -84,33 +84,27 @@ let transactions = protobuf.TransactionList.decode(txnListBytes).transactions;
 const batchHeaderBytes = protobuf.BatchHeader.encode({
   signerPublicKey: signer.getPublicKey().asHex(),
   transactionIds: transactions.map((txn) => txn.headerSignature),
-}).finish()
+}).finish();
 
-
-
-signature = signer.sign(batchHeaderBytes)
+signature = signer.sign(batchHeaderBytes);
 
 const batch = protobuf.Batch.create({
   header: batchHeaderBytes,
   headerSignature: signature,
-  transactions: transactions
-})
-
-
+  transactions: transactions,
+});
 
 const batchListBytes = protobuf.BatchList.encode({
-  batches: [batch]
-}).finish()
+  batches: [batch],
+}).finish();
 
-
-
-axios.post(`${HOST}/batches`, batchListBytes, {
-  headers: {'Content-Type': 'application/octet-stream'}
-})
+axios
+  .post(`${HOST}/batches`, batchListBytes, {
+    headers: { 'Content-Type': 'application/octet-stream' },
+  })
   .then((response) => {
     console.log(response.data);
   })
-  .catch((err)=>{
+  .catch((err) => {
     console.log(err);
   });
-

@@ -26,7 +26,7 @@ import {
 
 import crypto from 'crypto'
 import cbor from 'cbor'
-import { initKafkaConnect, receiveMessage } from './util/kafka'
+// import { initKafkaConnect, receiveMessage } from './util/kafka'
 
 // Constants defined in intkey specification
 const MIN_VALUE = 0
@@ -38,6 +38,7 @@ const _hash = (x) =>
 
 const INT_KEY_FAMILY = 'intkey'
 const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY).substring(0, 6)
+console.log(INT_KEY_NAMESPACE)
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
@@ -127,6 +128,7 @@ const _applyDec = _applyOperator('dec', (x, y) => x - y)
 
 let a = 1
 
+/** 
 initKafkaConnect().then(() => {
   receiveMessage('hemocomponents', async ({ topic, partition, message }) => {
     console.log({
@@ -136,7 +138,7 @@ initKafkaConnect().then(() => {
       value: message?.value?.toString(),
     })
   })
-})
+})*/
 
 export class IntegerKeyHandler extends TransactionHandler {
   constructor() {

@@ -25,9 +25,9 @@ if (typeof process.env.VALIDATOR === 'undefined') {
   process.exit(1)
 }
 console.log(process.env.VALIDATOR)
-const address = process.env.VALIDATOR
+const VALIDATOR_URL = 'tcp://' + process.env.DOCKER_HOST_IP + ':4004'
 
-const transactionProcessor = new TransactionProcessor(address)
+const transactionProcessor = new TransactionProcessor(VALIDATOR_URL)
 
 transactionProcessor.addHandler(new IntegerKeyHandler())
 
