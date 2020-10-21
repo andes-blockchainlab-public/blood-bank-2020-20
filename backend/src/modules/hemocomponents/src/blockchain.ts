@@ -11,7 +11,7 @@ const signer = new CryptoFactory(context).newSigner(privateKey)
 const HOST = 'http://' + process.env.DOCKER_HOST_IP + ':8008'
 // const HOST = 'http://192.168.99.100:30008';
 
-const hash = (x, length = 64) =>
+const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
 const INT_KEY_FAMILY = 'bloodbank'
