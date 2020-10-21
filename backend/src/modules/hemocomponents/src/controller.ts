@@ -20,7 +20,10 @@ export const createHemocomponent = async function (
     const bloodType = req.body.bloodType
 
     const hemocomponent = await queries.createHemocomponent({ id, bloodType })
-    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', hemocomponent)
+    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', {
+      owner: req.user?.email,
+      ...hemocomponent.toObject(),
+    })
 
     res.status(200).json(hemocomponent)
   } catch (err) {
@@ -43,7 +46,6 @@ export const getAllHemocomponents = async function (
   try {
     const hemocomponents = await queries.findHemocomponents()
     res.status(201).json(hemocomponents)
-    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', hemocomponents)
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {

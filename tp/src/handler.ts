@@ -26,19 +26,17 @@ import {
 
 import crypto from 'crypto'
 import cbor from 'cbor'
+import { sendKafkaMessage } from './util/kafka'
 // import { initKafkaConnect, receiveMessage } from './util/kafka'
 
-// Constants defined in intkey specification
-const MIN_VALUE = 0
-const MAX_VALUE = 4294967295
-const MAX_NAME_LENGTH = 20
+const _hash = (x, length = 64) =>
+  crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
-const _hash = (x) =>
-  crypto.createHash('sha512').update(x).digest('hex').toLowerCase()
+const INT_KEY_FAMILY = 'bloodbank'
+const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY, 6)
 
-const INT_KEY_FAMILY = 'intkey'
-const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY).substring(0, 6)
-console.log(INT_KEY_NAMESPACE)
+const getHemocomponentsAddress = (asset) =>
+  INT_KEY_NAMESPACE + '001' + _hash(asset, 61)
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
@@ -55,8 +53,6 @@ const _setEntry = (context, address, stateValue) => {
   let entries = {
     [address]: cbor.encode(stateValue),
   }
-  console.log(stateValue)
-  console.log(Buffer.from(cbor.encode(stateValue)).toString('base64'))
   // let entries = {
   //   [address]: Buffer.from("hello")
   // }
@@ -64,18 +60,16 @@ const _setEntry = (context, address, stateValue) => {
   return context.setState(entries)
 }
 
-const _applySet = (context, address, name, value) => (
-  possibleAddressValues
-) => {
+const _applySet = (context, address, id, value) => (possibleAddressValues) => {
   let stateValueRep = possibleAddressValues[address]
 
   let stateValue
   if (stateValueRep && stateValueRep.length > 0) {
     stateValue = cbor.decodeFirstSync(stateValueRep)
-    let stateName = stateValue[name]
+    let stateName = stateValue[id]
     if (stateName) {
       throw new InvalidTransaction(
-        `Verb is "set" but Name already in state, Name: ${name} Value: ${stateName}`
+        `Method is "set" but Name already in state, Name: ${id} Value: ${stateName}`
       )
     }
   }
@@ -85,49 +79,35 @@ const _applySet = (context, address, name, value) => (
     stateValue = {}
   }
 
-  stateValue[name] = value
+  stateValue[id] = value
 
   return _setEntry(context, address, stateValue)
 }
 
-const _applyOperator = (verb, op) => (context, address, name, value) => (
+const _applyUpdate = (context, address, id, value) => (
   possibleAddressValues
 ) => {
   let stateValueRep = possibleAddressValues[address]
-  if (!stateValueRep || stateValueRep.length === 0) {
-    throw new InvalidTransaction(`Verb is ${verb} but Name is not in state`)
-  }
 
-  let stateValue = cbor.decodeFirstSync(stateValueRep)
-  if (stateValue[name] === null || stateValue[name] === undefined) {
-    throw new InvalidTransaction(`Verb is ${verb} but Name is not in state`)
-  }
-
-  const result = op(stateValue[name], value)
-
-  if (result < MIN_VALUE) {
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "update" but Name already in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
     throw new InvalidTransaction(
-      `Verb is ${verb}, but result would be less than ${MIN_VALUE}`
+      `Method is "update" but Name already in state, Name: ${id}`
     )
   }
 
-  if (result > MAX_VALUE) {
-    throw new InvalidTransaction(
-      `Verb is ${verb}, but result would be greater than ${MAX_VALUE}`
-    )
-  }
+  stateValue[id] = value
 
-  // Increment the value in state by value
-  // stateValue[name] = op(stateValue[name], value)
-  stateValue[name] = result
   return _setEntry(context, address, stateValue)
 }
-
-const _applyInc = _applyOperator('inc', (x, y) => x + y)
-const _applyDec = _applyOperator('dec', (x, y) => x - y)
-
-let a = 1
-
 /** 
 initKafkaConnect().then(() => {
   receiveMessage('hemocomponents', async ({ topic, partition, message }) => {
@@ -140,14 +120,13 @@ initKafkaConnect().then(() => {
   })
 })*/
 
-export class IntegerKeyHandler extends TransactionHandler {
+export class HemocomponentsKeyHandler extends TransactionHandler {
   constructor() {
     super(INT_KEY_FAMILY, ['1.0'], [INT_KEY_NAMESPACE])
   }
 
   apply(transactionProcessRequest, context) {
     console.log('Something happened')
-    console.log('___')
     // return Promise.reject(
     //   new InvalidTransaction("??")
     // );
@@ -155,73 +134,68 @@ export class IntegerKeyHandler extends TransactionHandler {
     // console.log(a);
     // throw new InvalidTransaction("wait");
 
-    return _decodeCbor(transactionProcessRequest.payload)
-      .catch(_toInternalError)
-      .then((update) => {
-        //
-        // Validate the update
-        let name = update.Name
-        if (!name) {
-          throw new InvalidTransaction('Name is required')
-        }
-
-        if (name.length > MAX_NAME_LENGTH) {
-          throw new InvalidTransaction(
-            `Name must be a string of no more than ${MAX_NAME_LENGTH} characters`
-          )
-        }
-
-        let verb = update.Verb
-        if (!verb) {
-          throw new InvalidTransaction('Verb is required')
-        }
-
-        let value = update.Value
-        if (value === null || value === undefined) {
-          throw new InvalidTransaction('Value is required')
-        }
-
-        let parsed = parseInt(value)
-        if (parsed !== value || parsed < MIN_VALUE || parsed > MAX_VALUE) {
-          throw new InvalidTransaction(
-            `Value must be an integer ` +
-              `no less than ${MIN_VALUE} and ` +
-              `no greater than ${MAX_VALUE}`
-          )
-        }
-
-        value = parsed
-
-        // Determine the action to apply based on the verb
-        let actionFn
-        if (verb === 'set') {
-          actionFn = _applySet
-        } else if (verb === 'dec') {
-          actionFn = _applyDec
-        } else if (verb === 'inc') {
-          actionFn = _applyInc
-        } else {
-          throw new InvalidTransaction(`Verb must be set, inc, dec not ${verb}`)
-        }
-
-        let address = INT_KEY_NAMESPACE + _hash(name).slice(-64)
-
-        // Get the current state, for the key's address:
-        let getPromise = context.getState([address])
-
-        // Apply the action to the promise's result:
-        let actionPromise = getPromise.then(
-          actionFn(context, address, name, value)
-        )
-
-        // Validate that the action promise results in the correctly set address:
-
-        return actionPromise.then((addresses) => {
-          if (addresses.length === 0) {
-            throw new InternalError('State Error!')
+    try {
+      return _decodeCbor(transactionProcessRequest.payload)
+        .catch(_toInternalError)
+        .then((update) => {
+          console.log(update)
+          //
+          // Validate the update
+          let id = update.payload?._id
+          console.log('objectiD', id)
+          if (!id) {
+            throw new InvalidTransaction('Name is required')
           }
-          console.log(`Verb: ${verb} Name: ${name} Value: ${value}`)
+
+          let verb = update.Method
+          if (!verb) {
+            throw new InvalidTransaction('Method is required')
+          }
+
+          let value = update.payload
+          if (value === null || value === undefined) {
+            throw new InvalidTransaction('Value is required')
+          }
+          // value = { ...value, lastUpdated: new Date().toISOString() }
+
+          // Determine the action to apply based on the verb
+          let actionFn
+          if (verb === 'set') {
+            actionFn = _applySet
+          } else if (verb === 'update') {
+            actionFn = _applyUpdate
+          } else {
+            throw new InvalidTransaction(`Method must be set, not ${verb}`)
+          }
+
+          let address = getHemocomponentsAddress(id)
+
+          // Get the current state, for the key's address:
+          let getPromise = context.getState([address])
+
+          // Apply the action to the promise's result:
+          let actionPromise = getPromise.then(
+            actionFn(context, address, id, value)
+          )
+
+          // Validate that the action promise results in the correctly set address:
+
+          return actionPromise.then((addresses) => {
+            if (addresses.length === 0) {
+              throw new InternalError('State Error!')
+            } else {
+              sendKafkaMessage('SAVED_HEMOCOMPONENT_BC', value)
+            }
+            console.log(`Method: ${verb} Name: ${id} Value: ${value}`)
+          })
         })
-      })
+        .catch((e) => {
+          console.log('fallé', e)
+          return
+        })
+    } catch (e) {
+      console.log('fallé', e)
+      return
+    }
   }
 }

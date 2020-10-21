@@ -18,7 +18,8 @@
 'use strict'
 
 import { TransactionProcessor } from 'sawtooth-sdk/processor'
-import { IntegerKeyHandler } from './handler'
+import { HemocomponentsKeyHandler } from './handler'
+import { initKafkaConnect } from './util/kafka'
 
 if (typeof process.env.VALIDATOR === 'undefined') {
   console.log('missing a validator address')
@@ -29,6 +30,6 @@ const VALIDATOR_URL = 'tcp://' + process.env.DOCKER_HOST_IP + ':4004'
 
 const transactionProcessor = new TransactionProcessor(VALIDATOR_URL)
 
-transactionProcessor.addHandler(new IntegerKeyHandler())
+transactionProcessor.addHandler(new HemocomponentsKeyHandler())
 
-transactionProcessor.start()
+initKafkaConnect().then(transactionProcessor.start())

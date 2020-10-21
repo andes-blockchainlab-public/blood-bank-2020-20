@@ -1,3 +1,4 @@
+import { activateHemocomponentsListeners } from '../modules/hemocomponents/src/kafka'
 import { Kafka, EachMessagePayload } from 'kafkajs'
 
 const kafka = new Kafka({
@@ -27,8 +28,12 @@ export const receiveMessage = async (
   value: (payload: EachMessagePayload) => Promise<void>
 ): Promise<void> => {
   const consumer = kafka.consumer({ groupId: 'kafka' })
-  await consumer.subscribe({ topic, fromBeginning: true })
+  await consumer.subscribe({ topic })
   await consumer.run({
     eachMessage: value,
   })
+}
+
+export const activateKafkaListeners = async (): Promise<void> => {
+  activateHemocomponentsListeners()
 }

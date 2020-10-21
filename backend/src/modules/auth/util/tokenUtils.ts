@@ -12,7 +12,6 @@ export const validateToken = async (token: string): Promise<string> => {
     )
   }
   const user = await new Promise<string>((resolve) => {
-    console.log('tk', token)
     jwt.verify(token, process.env.PRIVATE_KEY, function (err, decoded) {
       if (err) {
         console.log(err)

@@ -146,7 +146,6 @@ export const verifyUser = async function (
 
   let userData
   try {
-    console.log('entra tk')
     userData = await validateToken(token!)
   } catch (err) {
     console.log(err)

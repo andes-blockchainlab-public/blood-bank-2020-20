@@ -14,7 +14,7 @@ const HOST = 'http://' + process.env.DOCKER_HOST_IP + ':8008';
 const hash = (x) =>
   crypto.createHash('sha512').update(x).digest('hex').toLowerCase();
 
-const INT_KEY_FAMILY = 'intkey';
+const INT_KEY_FAMILY = 'bloodbank';
 const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY).substring(0, 6);
 const address = INT_KEY_NAMESPACE + hash('foo').slice(-64);
 console.log(address);
@@ -38,7 +38,7 @@ const { protobuf } = require('sawtooth-sdk');
 //address = INT_KEY_NAMESPACE + _hash(name).slice(-64)
 
 const transactionHeaderBytes = protobuf.TransactionHeader.encode({
-  familyName: 'intkey',
+  familyName: 'bloodbank',
   familyVersion: '1.0',
   inputs: [address],
   outputs: [address],

@@ -1,4 +1,5 @@
 import { Kafka, EachMessagePayload } from 'kafkajs'
+import cbor from 'cbor'
 
 const kafka = new Kafka({
   clientId: 'kafka',
@@ -7,15 +8,20 @@ const kafka = new Kafka({
 
 const producer = kafka.producer()
 
-export const initKafkaConnect = async () => {
+export const initKafkaConnect = async (): Promise<void> => {
   // Producing
   await producer.connect()
 }
 
-export const sendMessage = async (
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+export const sendKafkaMessage = async (
   topic: string,
-  value: string
+  payload: any
 ): Promise<void> => {
+  console.log('payload to send', payload)
+  const value = cbor.encode(JSON.parse(JSON.stringify(payload)))
+  console.log('value to send', value)
+  console.log('topic', topic)
   await producer.send({
     topic,
     messages: [{ value }],
@@ -24,11 +30,11 @@ export const sendMessage = async (
 
 export const receiveMessage = async (
   topic: string,
-  value: (payload: EachMessagePayload) => Promise<void>
-) => {
-  const consumer = kafka.consumer({ groupId: 'kafka' })
+  handler: (payload: EachMessagePayload) => Promise<void>
+): Promise<void> => {
+  const consumer = kafka.consumer({ groupId: topic })
   await consumer.subscribe({ topic, fromBeginning: true })
   await consumer.run({
-    eachMessage: value,
+    eachMessage: handler,
   })
 }

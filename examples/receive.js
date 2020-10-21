@@ -4,11 +4,11 @@ const Kafka = require('node-rdkafka');
 var stream = new Kafka.KafkaConsumer.createReadStream(
   {
     'group.id': 'kafka',
-    'metadata.broker.list': '192.168.99.100:9092',
+    'metadata.broker.list': process.env.DOCKER_HOST_IP + ':9092',
   },
   {},
   {
-    topics: ['mytopic'],
+    topics: ['SAVED_HEMOCOMPONENT_DB'],
   }
 );
 

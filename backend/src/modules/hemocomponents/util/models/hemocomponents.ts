@@ -10,6 +10,7 @@ const HemocomponentSchema = new Schema(
   {
     id: { type: String, required: true },
     bloodType: { type: String, required: true },
+    savedInBlockchain: { type: Boolean, default: false },
   },
   { autoIndex }
 )
