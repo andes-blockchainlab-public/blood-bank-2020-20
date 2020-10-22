@@ -21,6 +21,7 @@ export const createHemocomponent = async (hemocomponent: {
   id: string
   bloodType: string
 }): Promise<IHemocomponent> => {
+  // @ts-ignore
   return await hemocomponents.create(hemocomponent)
 }
 

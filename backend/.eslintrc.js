@@ -16,6 +16,7 @@ module.exports = {
     ],
     '@typescript-eslint/interface-name-prefix': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
+    '@typescript-eslint/ban-ts-ignore': 0,
   },
   env: {
     node: true,
