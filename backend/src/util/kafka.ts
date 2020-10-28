@@ -1,4 +1,4 @@
-import { activateHemocomponentsListeners } from '../modules/hemocomponents/src/kafka'
+import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/src/kafka'
 import { Kafka, EachMessagePayload } from 'kafkajs'
 
 const kafka = new Kafka({
@@ -35,5 +35,5 @@ export const receiveMessage = async (
 }
 
 export const activateKafkaListeners = async (): Promise<void> => {
-  activateHemocomponentsListeners()
+  activateHemocomponentsKafkaListeners()
 }

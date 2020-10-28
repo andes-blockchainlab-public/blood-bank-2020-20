@@ -183,11 +183,11 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
           return actionPromise.then((addresses) => {
             if (addresses.length === 0) {
               throw new InternalError('State Error!')
-            } else if (verb === 'set') {
+            } /*else if (verb === 'set') {
               sendKafkaMessage('SAVED_HEMOCOMPONENT_BC', value)
             } else {
               sendKafkaMessage('UPDATED_HEMOCOMPONENT_BC', value)
-            }
+            }*/
             console.log(`Method: ${verb} Name: ${id} Value: ${value}`)
           })
         })
