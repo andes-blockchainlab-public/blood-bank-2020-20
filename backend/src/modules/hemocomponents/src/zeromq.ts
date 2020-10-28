@@ -1,7 +1,7 @@
 import zmq from 'zeromq'
 const sock = zmq.socket('sub')
 
-export const activateHemocomponentsZMQListener = async () => {
+export const activateHemocomponentsZMQListener = async (): Promise<void> => {
   sock.subscribe('sawtooth/block-commit')
   console.log('Subscriber connected to port 3000')
 
