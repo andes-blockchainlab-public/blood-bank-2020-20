@@ -21,12 +21,8 @@ import { TransactionProcessor } from 'sawtooth-sdk/processor'
 import { HemocomponentsKeyHandler } from './handler'
 import { initKafkaConnect } from './util/kafka'
 
-if (typeof process.env.VALIDATOR === 'undefined') {
-  console.log('missing a validator address')
-  process.exit(1)
-}
-console.log(process.env.VALIDATOR)
-const VALIDATOR_URL = 'tcp://' + process.env.DOCKER_HOST_IP + ':4004'
+const VALIDATOR_URL = 'tcp://' + "localhost" + ':4004'
+console.log(VALIDATOR_URL)
 
 const transactionProcessor = new TransactionProcessor(VALIDATOR_URL)
 

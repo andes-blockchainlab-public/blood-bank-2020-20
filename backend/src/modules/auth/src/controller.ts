@@ -1,6 +1,6 @@
 import express from 'express'
 export const router = express.Router()
-import * as constants from '../util/constants'
+import * as constants from '../../../util/constants'
 import * as queries from './queries'
 
 import {

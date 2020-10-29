@@ -8,7 +8,7 @@ lib-cov
 *.gz
 *.swp
 *.ppk
-
+.idea/
 **/.terraform/*
 
 # .tfstate files

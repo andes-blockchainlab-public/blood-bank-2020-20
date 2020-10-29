@@ -3,7 +3,7 @@ import { receiveMessage } from '../util/kafka'
 import { sendBlockchain } from './blockchain'
 import { updateObjectBlockchainStatus } from './queries'
 
-export const activateHemocomponentsListeners = (): void => {
+export const activateHospitalListeners = (): void => {
   receiveMessage('SAVED_HEMOCOMPONENT_DB', async (payload) => {
     console.log('payload1', payload?.message?.value)
     if (payload.message.value) {
