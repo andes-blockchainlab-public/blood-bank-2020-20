@@ -2,6 +2,7 @@ import cbor from 'cbor'
 import { Kafka, EachMessagePayload } from 'kafkajs'
 import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/src/kafkaListeners'
 import { activateHospitalListeners } from '../modules/hospitals/src/kafkaListeners'
+import { activatePatientListeners } from '../modules/patients/src/kafkaListeners'
 
 const kafka = new Kafka({
   clientId: 'Blood-Bank',
@@ -44,4 +45,5 @@ export const receiveMessage = async (
 export const activateKafkaListeners = async (): Promise<void> => {
   activateHemocomponentsKafkaListeners()
   activateHospitalListeners()
+  activatePatientListeners()
 }
