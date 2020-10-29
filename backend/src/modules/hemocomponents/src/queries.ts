@@ -1,5 +1,5 @@
-import hemocomponents from '../util/models/hemocomponents'
-import IHemocomponent from '../util/models/IHemocomponent'
+import hemocomponents from '../models/hemocomponents'
+import IHemocomponent from '../models/IHemocomponent'
 import mongoose, { ClientSession } from 'mongoose'
 
 export const getObjectId = (_id: string): mongoose.Types.ObjectId => {

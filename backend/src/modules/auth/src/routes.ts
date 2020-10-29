@@ -1,7 +1,7 @@
 import express from 'express'
 import { validate } from './validator'
 import * as auth from './controller'
-import { exceptionHandler } from '../util/errorHandler'
+import { exceptionHandler } from '@/util/errorHandler'
 export const router = express.Router()
 
 // RefreshToken

@@ -2,7 +2,7 @@ import express from 'express'
 export const router = express.Router()
 import * as queries from './queries'
 import { validationErrorHandler } from './validator'
-import { sendKafkaMessage } from '../util/kafka'
+import { sendMessage } from '@/util/kafka'
 
 /**
  * Crea un hospitale
@@ -19,7 +19,7 @@ export const createHospital = async function (
     const name = req.body.name
 
     const hospital = await queries.createHospital({ id, name })
-    sendKafkaMessage('RegistrarHospitalBD', {
+    sendMessage('RegistrarHospitalBD', {
       owner: req.user?.email,
       ...hospital.toObject(),
     })

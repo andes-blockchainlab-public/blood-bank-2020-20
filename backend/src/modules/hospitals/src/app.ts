@@ -2,9 +2,9 @@ import express from 'express'
 import cors from 'cors'
 require('cross-fetch/polyfill')
 import bodyParser from 'body-parser'
-import { initDB } from '../util/mongoose'
+import { initDB } from '@/util/mongoose'
 import { router } from './routes'
-import { exceptionMiddleware } from '../util/errorHandler'
+import { exceptionMiddleware } from '@/util/errorHandler'
 
 const app = express()
 

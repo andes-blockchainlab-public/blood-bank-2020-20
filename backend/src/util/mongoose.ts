@@ -1,5 +1,5 @@
 'use strict'
-import { initDB as initDB1 } from '../modules/auth/util/mongoose'
+import { initDB as initDB1 } from '@/util/mongoose'
 
 export let initDB
 if (process.env.NODE_ENV !== 'verifier') {

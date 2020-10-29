@@ -3,8 +3,8 @@ export const router = express.Router()
 import * as queries from './queries'
 
 import { validationErrorHandler } from './validator'
-import { sendKafkaMessage } from '../util/kafka'
-import { CustomError } from '../util/errorHandler'
+import { sendMessage } from '@/util/kafka'
+import { CustomError } from '@/util/errorHandler'
 
 /**
  * Crea un hemocomponente
@@ -21,7 +21,7 @@ export const createHemocomponent = async function (
     const bloodType = req.body.bloodType
 
     const hemocomponent = await queries.createHemocomponent({ id, bloodType })
-    sendKafkaMessage('SAVED_HEMOCOMPONENT_DB', {
+    sendMessage('SAVED_HEMOCOMPONENT_DB', {
       owner: req.user?.email,
       ...hemocomponent.toObject(),
     })
@@ -57,7 +57,7 @@ export const updateHemocomponent = async function (
     hemocomponent.savedInBlockchain = false
     hemocomponent = await hemocomponent.save()
 
-    sendKafkaMessage('UPDATED_HEMOCOMPONENT_DB', {
+    sendMessage('UPDATED_HEMOCOMPONENT_DB', {
       owner: req.user?.email,
       ...hemocomponent.toObject(),
     })

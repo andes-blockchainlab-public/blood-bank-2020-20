@@ -1,8 +1,8 @@
-import IUser from './models/IUser'
+import IUser from '../models/IUser'
 import * as crypto from 'crypto'
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
-import { CustomError } from './errorHandler'
+import { CustomError } from '@/util/errorHandler'
 
 export const validateToken = async (token: string): Promise<string> => {
   if (!token) {

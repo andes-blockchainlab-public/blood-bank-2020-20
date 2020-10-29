@@ -3,9 +3,9 @@ import cors from 'cors'
 // Este polyfill se usa para la librería de cognito que lo requiere y para enviar peticiones http
 require('cross-fetch/polyfill')
 import bodyParser from 'body-parser'
-import { initDB } from '../util/mongoose'
+import { initDB } from '@/util/mongoose'
 import { router } from './routes'
-import { exceptionMiddleware } from '../util/errorHandler'
+import { exceptionMiddleware } from '@/util/errorHandler'
 
 const app = express()
 

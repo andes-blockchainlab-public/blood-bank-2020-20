@@ -1,5 +1,5 @@
-import hospitals from '../util/models/hospitals'
-import IHospital from '../util/models/IHospital'
+import hospitals from '../models/hospitals'
+import IHospital from '../models/IHospital'
 import mongoose, { ClientSession } from 'mongoose'
 
 export const getObjectId = (_id: string): mongoose.Types.ObjectId => {
@@ -21,6 +21,7 @@ export const createHospital = async (hospital: {
   id: string
   name: string
 }): Promise<IHospital> => {
+  // @ts-ignore
   return await hospitals.create(hospital)
 }
 

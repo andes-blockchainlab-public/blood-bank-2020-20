@@ -9,9 +9,9 @@ import {
   verifyPassword,
   hashPassword,
   validateToken,
-} from '../util/tokenUtils'
+} from './tokenUtils'
 import { validationErrorHandler } from './validator'
-import { CustomError } from '../util/errorHandler'
+import { CustomError } from '@/util/errorHandler'
 
 /**
  * Hace login
