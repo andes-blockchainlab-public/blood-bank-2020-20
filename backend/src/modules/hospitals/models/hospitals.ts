@@ -23,7 +23,7 @@ type HospitalModel<T extends Document> = PaginateModel<T>
 
 // Export the model and return your IHospital interface
 
-export default (mongoose.models.hemocomponents as HospitalModel<IHospital>) ||
+export default (mongoose.models.hospitals as HospitalModel<IHospital>) ||
   (mongoose.model<IHospital>('hospitals', HospitalSchema) as HospitalModel<
     IHospital
   >)

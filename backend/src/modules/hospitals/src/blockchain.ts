@@ -19,11 +19,11 @@ const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = INT_KEY_NAMESPACE + '001' + hash(payload?._id, 61)
+  const address = INT_KEY_NAMESPACE + '002' + hash(payload?._id, 61)
   console.log('address send bc', address)
   console.log('object id', payload?._id)
   payload = { ...payload, lastUpdated: new Date() }
-  payload = { namespace: 'Hemocomponents', Method: method, payload }
+  payload = { namespace: 'Hospitals', Method: method, payload }
 
   const payloadBytes = cbor.encode(payload)
 

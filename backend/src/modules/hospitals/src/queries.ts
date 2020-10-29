@@ -8,7 +8,7 @@ export const getObjectId = (_id: string): mongoose.Types.ObjectId => {
 
 export const findHospitalById = async (hospital: {
   id: string
-  bloodType: string
+  name: string
 }): Promise<IHospital | null> => {
   return await hospitals.findOne({ id: hospital })
 }

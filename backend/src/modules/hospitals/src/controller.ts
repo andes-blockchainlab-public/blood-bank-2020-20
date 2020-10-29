@@ -17,7 +17,6 @@ export const createHospital = async function (
   try {
     const id = req.body.id
     const name = req.body.name
-
     const hospital = await queries.createHospital({ id, name })
     sendMessage('RegistrarHospitalBD', {
       owner: req.user?.email,
@@ -43,6 +42,7 @@ export const getAllHospitals = async function (
   res: express.Response
 ): Promise<void> {
   try {
+    console.log('Llegue al hospital')
     const hospitals = await queries.findHospitals()
     res.status(201).json(hospitals)
   } catch (err) {
