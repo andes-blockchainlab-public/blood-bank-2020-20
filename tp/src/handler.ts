@@ -35,9 +35,48 @@ const _hash = (x, length = 64) =>
 const INT_KEY_FAMILY = 'bloodbank'
 const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY, 6)
 
-const getHemocomponentsAddress = (asset) =>
-  INT_KEY_NAMESPACE + '001' + _hash(asset, 61)
+enum Service {
+  Hemocomponents,
+  Hospitals,
+  Patients,
+  Users,
+}
 
+const getService = (namespace: string): Service => {
+  switch (namespace) {
+    case 'Hemocomponents':
+      return Service.Hemocomponents
+    case 'Hospitals':
+      return Service.Hospitals
+    case 'Patients':
+      return Service.Patients
+    case 'Users':
+      return Service.Users
+  }
+  throw new InvalidTransaction(
+    `Namespace not in service, current namespace value is: ${namespace}`
+  )
+}
+
+const getServiceAddress = (service: Service, asset): string => {
+  let prefix = ''
+  switch (service) {
+    case Service.Hemocomponents:
+      prefix = '001'
+    case Service.Hospitals:
+      prefix = '002'
+    case Service.Patients:
+      prefix = '003'
+    case Service.Users:
+      prefix = '004'
+  }
+  if (!prefix) {
+    throw new InvalidTransaction(
+      `Service not in list, current value is: ${service}`
+    )
+  }
+  return INT_KEY_NAMESPACE + prefix + _hash(asset, 61)
+}
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
   new Promise((resolve, reject) =>
@@ -168,7 +207,9 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
             throw new InvalidTransaction(`Method must be set, not ${verb}`)
           }
 
-          let address = getHemocomponentsAddress(id)
+          const service = getService(update.namespace)
+
+          let address = getServiceAddress(service, id)
 
           // Get the current state, for the key's address:
           let getPromise = context.getState([address])
