@@ -2,7 +2,7 @@ import express from 'express'
 export const router = express.Router()
 import * as queries from './queries'
 import { validationErrorHandler } from './validator'
-import { sendMessage } from '@/util/kafka'
+import { sendMessage } from '../../../util/kafka'
 
 /**
  * Crea un hospitale

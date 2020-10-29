@@ -1,5 +1,5 @@
 import cbor from 'cbor'
-import { receiveMessage } from '@/util/kafka'
+import { receiveMessage } from '../../../util/kafka'
 import { sendBlockchain } from './blockchain'
 import { updateObjectBlockchainStatus } from './queries'
 

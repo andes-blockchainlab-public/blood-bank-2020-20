@@ -1,8 +1,10 @@
-import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/src/kafka'
+import cbor from 'cbor'
 import { Kafka, EachMessagePayload } from 'kafkajs'
+import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/src/kafkaListeners'
+import { activateHospitalListeners } from '../modules/hospitals/src/kafkaListeners'
 
 const kafka = new Kafka({
-  clientId: 'kafka',
+  clientId: 'Blood-Bank',
   brokers: [process.env.DOCKER_HOST_IP + ':9092'],
 })
 
@@ -15,8 +17,13 @@ export const initKafkaConnect = async (): Promise<void> => {
 
 export const sendMessage = async (
   topic: string,
-  value: string
+  payload: any
 ): Promise<void> => {
+  if (payload._id) {
+    payload._id = payload._id.toString()
+  }
+  const value = cbor.encode(JSON.parse(JSON.stringify(payload)))
+  console.log('value to send', value)
   await producer.send({
     topic,
     messages: [{ value }],
@@ -25,15 +32,16 @@ export const sendMessage = async (
 
 export const receiveMessage = async (
   topic: string,
-  value: (payload: EachMessagePayload) => Promise<void>
+  handler: (payload: EachMessagePayload) => Promise<void>
 ): Promise<void> => {
-  const consumer = kafka.consumer({ groupId: 'kafka' })
-  await consumer.subscribe({ topic })
+  const consumer = kafka.consumer({ groupId: topic })
+  await consumer.subscribe({ topic, fromBeginning: true })
   await consumer.run({
-    eachMessage: value,
+    eachMessage: handler,
   })
 }
 
 export const activateKafkaListeners = async (): Promise<void> => {
   activateHemocomponentsKafkaListeners()
+  activateHospitalListeners()
 }

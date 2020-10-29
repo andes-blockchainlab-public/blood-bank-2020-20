@@ -3,8 +3,8 @@ export const router = express.Router()
 import * as queries from './queries'
 
 import { validationErrorHandler } from './validator'
-import { sendMessage } from '@/util/kafka'
-import { CustomError } from '@/util/errorHandler'
+import { sendMessage } from '../../../util/kafka'
+import { CustomError } from '../../../util/errorHandler'
 
 /**
  * Crea un hemocomponente
