@@ -3,7 +3,7 @@ import cbor from 'cbor'
 
 const kafka = new Kafka({
   clientId: 'kafka',
-  brokers: ["localhost" + ':9092'],
+  brokers: [process.env.DOCKER_HOST_IP + ':9092'],
 })
 
 const producer = kafka.producer()
@@ -28,7 +28,10 @@ export const sendKafkaMessage = async (
   })
 }
 
-export const receiveMessage = async (topic: string, handler: (payload: EachMessagePayload) => Promise<void>): Promise<void> => {
+export const receiveMessage = async (
+  topic: string,
+  handler: (payload: EachMessagePayload) => Promise<void>
+): Promise<void> => {
   const consumer = kafka.consumer({ groupId: topic })
   await consumer.subscribe({ topic, fromBeginning: true })
   await consumer.run({

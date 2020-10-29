@@ -8,7 +8,7 @@ import { initKafkaConnect } from './util/kafka'
 import { router } from './routes'
 import { exceptionMiddleware } from './util/errorHandler'
 import { activateKafkaListeners } from './util/kafka'
-import { activateZMQListeners } from './util/zeromq'
+import { activateBCEventListeners } from './util/zeromq'
 
 if (process.env.NODE_ENV !== 'verifier') {
   const app = express()
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'verifier') {
   const PORT = process.env.PORT || 4000
   initDB()
   initKafkaConnect().then(activateKafkaListeners)
-  activateZMQListeners()
+  activateBCEventListeners()
 
   app.listen(PORT, () => {
     console.log(`Server is running in http://localhost:${PORT}`)

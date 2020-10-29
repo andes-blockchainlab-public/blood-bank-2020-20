@@ -21,7 +21,7 @@ import { TransactionProcessor } from 'sawtooth-sdk/processor'
 import { HemocomponentsKeyHandler } from './handler'
 import { initKafkaConnect } from './util/kafka'
 
-const VALIDATOR_URL = 'tcp://' + "localhost" + ':4004'
+const VALIDATOR_URL = 'tcp://' + process.env.DOCKER_HOST_IP + ':4004'
 console.log(VALIDATOR_URL)
 
 const transactionProcessor = new TransactionProcessor(VALIDATOR_URL)

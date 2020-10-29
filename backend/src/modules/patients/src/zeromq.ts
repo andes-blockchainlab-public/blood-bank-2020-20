@@ -25,7 +25,7 @@ const handleEvent = (msg): void => {
     const events = EventList.decode(msg.content).events
     console.log(events)
     events.forEach((e) => {
-      console.log('llega evento hemocomponentes', e.eventType)
+      console.log('llega evento pacientes', e.eventType)
       if (e.eventType == 'myevent') {
         console.log(e)
         console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
@@ -78,7 +78,7 @@ const subscribe = (): void => {
     })
 }
 
-export const activateHemocomponentsBCEventistener = async (): Promise<void> => {
+export const activatePatientsBCEventistener = async (): Promise<void> => {
   stream.connect(() => {
     stream.onReceive(handleEvent)
     subscribe()

@@ -63,12 +63,16 @@ const getServiceAddress = (service: Service, asset): string => {
   switch (service) {
     case Service.Hemocomponents:
       prefix = '001'
+      break
     case Service.Hospitals:
       prefix = '002'
+      break
     case Service.Patients:
       prefix = '003'
+      break
     case Service.Users:
       prefix = '004'
+      break
   }
   if (!prefix) {
     throw new InvalidTransaction(
@@ -207,9 +211,12 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
             throw new InvalidTransaction(`Method must be set, not ${verb}`)
           }
 
+          console.log('namespace', update.namespace)
           const service = getService(update.namespace)
+          console.log(service)
 
           let address = getServiceAddress(service, id)
+          console.log(address)
 
           // Get the current state, for the key's address:
           let getPromise = context.getState([address])
@@ -230,6 +237,13 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
               sendKafkaMessage('UPDATED_HEMOCOMPONENT_BC', value)
             }*/
             console.log(`Method: ${verb} Name: ${id} Value: ${value}`)
+            console.log(
+              context.addEvent(
+                'myevent',
+                [['name', 'myname']],
+                Buffer.from('hello', 'utf8')
+              )
+            )
           })
         })
         .catch((e) => {
