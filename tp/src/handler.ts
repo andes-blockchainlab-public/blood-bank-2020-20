@@ -213,7 +213,6 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
 
           console.log('namespace', update.namespace)
           const service = getService(update.namespace)
-          console.log(service)
 
           let address = getServiceAddress(service, id)
           console.log(address)

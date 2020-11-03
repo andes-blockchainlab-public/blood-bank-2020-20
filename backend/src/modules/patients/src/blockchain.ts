@@ -26,6 +26,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
   payload = { namespace: 'Patients', Method: method, payload }
 
   const payloadBytes = cbor.encode(payload)
+  console.log('bytes', payloadBytes)
 
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: 'bloodbank',
@@ -94,7 +95,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
       headers: { 'Content-Type': 'application/octet-stream' },
     })
     .then((response) => {
-      console.log('respuesta', response.data)
+      console.log('respuesta nueva', response.data)
     })
     .catch((err) => {
       console.log(err)

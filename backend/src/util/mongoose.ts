@@ -1,6 +1,7 @@
 'use strict'
 import mongoose from 'mongoose'
-const uri = process.env.DB_HOST
+const uri = 'mongodb://root:example@192.168.99.100:27017/mydb?authSource=admin'
+console.log(uri)
 const initDBMongo = function (): void {
   mongoose.connect(uri, {
     useNewUrlParser: true,

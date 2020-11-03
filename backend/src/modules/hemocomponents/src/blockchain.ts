@@ -27,6 +27,9 @@ export const sendBlockchain = (method: string, payload: any): void => {
 
   const payloadBytes = cbor.encode(payload)
 
+  console.log('Payload bytes', payloadBytes)
+  console.log(payloadBytes.toString('ascii'))
+
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: 'bloodbank',
     familyVersion: '1.0',

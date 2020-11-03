@@ -23,16 +23,14 @@ const handleEvent = (msg): void => {
   //console.log('events', 'llega evento', msg)
   if (msg.messageType === Message.MessageType.CLIENT_EVENTS) {
     const events = EventList.decode(msg.content).events
-    console.log(events)
     events.forEach((e) => {
-      console.log('llega evento pacientes', e.eventType)
       if (e.eventType == 'myevent') {
-        console.log(e)
-        console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
+        //console.log(e)
+        //console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
       }
       if (e.eventType == 'sawtooth/block-commit') {
-        console.log(e)
-        console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
+        //console.log(e)
+        //console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
       }
     })
     // deltas.handle(getBlock(events), getChanges(events))
@@ -68,7 +66,6 @@ const subscribe = (): void => {
     )
     .then((response) => ClientEventsSubscribeResponse.decode(response))
     .then((decoded) => {
-      console.log('llega1', ClientEventsSubscribeResponse.Status)
       const status = Object.keys(ClientEventsSubscribeResponse.Status).find(
         (key) => ClientEventsSubscribeResponse.Status[key] === decoded.status
       )
