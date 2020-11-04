@@ -4,8 +4,15 @@ import * as hecomponent from './controller'
 import { exceptionHandler } from '../../../util/errorHandler'
 export const router = express.Router()
 
-// Listar hemocomponente
-router.get('/', exceptionHandler(hecomponent.getAllHemocomponents))
+// Traer hemocomponente por id
+router.get(
+  '/:id',
+  verifyUser,
+  exceptionHandler(hecomponent.getHemocomponentById)
+)
+
+// Listar hemocomponentes
+router.get('/', verifyUser, exceptionHandler(hecomponent.getAllHemocomponents))
 
 // Crear hemocomponente
 router.post(

@@ -40,7 +40,7 @@ const parseBlockCommit = async (blockId: string): Promise<string> => {
 
 const checkServiceData = async (payload: string): Promise<void> => {
   console.log(payload)
-  let buff = Buffer.from(payload, 'base64')
+  const buff = Buffer.from(payload, 'base64')
   const data = cbor.decodeFirstSync(buff)
   console.log(data)
   if (data.namespace === 'Hemocomponents') {

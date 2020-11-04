@@ -59,7 +59,7 @@ services:
     #Sawtooth----------------------------------
 
   settings-tp:
-    image: hyperledger/sawtooth-settings-tp:chime
+    image: hyperledger/sawtooth-settings-tp:latest
     container_name: sawtooth-settings-tp-default
     depends_on:
       - validator
@@ -91,7 +91,7 @@ services:
     #entrypoint: xo-tp-python -vv -C tcp://validator:4004
 
   validator:
-    image: hyperledger/sawtooth-validator:chime
+    image: hyperledger/sawtooth-validator:latest
     container_name: sawtooth-validator-default
     expose:
       - 4004
@@ -116,14 +116,14 @@ services:
       \""
 
   devmode-engine:
-    image: hyperledger/sawtooth-devmode-engine-rust:chime
+    image: hyperledger/sawtooth-devmode-engine-rust:latest
     container_name: sawtooth-devmode-engine-rust-default
     depends_on:
       - validator
     entrypoint: devmode-engine-rust -C tcp://validator:5050
 
   rest-api:
-    image: hyperledger/sawtooth-rest-api:chime
+    image: hyperledger/sawtooth-rest-api:latest
     container_name: sawtooth-rest-api-default
     expose:
       - 8008
@@ -134,7 +134,7 @@ services:
     entrypoint: sawtooth-rest-api -C tcp://validator:4004 --bind rest-api:8008
 
   shell:
-    image: hyperledger/sawtooth-shell:chime
+    image: hyperledger/sawtooth-shell:latest
     container_name: sawtooth-shell-default
     depends_on:
       - rest-api

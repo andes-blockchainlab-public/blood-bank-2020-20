@@ -1,10 +1,10 @@
 import express from 'express'
 export const router = express.Router()
-import * as queries from './queries'
 
 import { validationErrorHandler } from './validator'
 import { sendMessage } from '../../../util/kafka'
 import { CustomError } from '../../../util/errorHandler'
+import * as blockchain from './blockchain'
 
 /**
  * Crea un hemocomponente
@@ -20,13 +20,17 @@ export const createHemocomponent = async function (
     const id = req.body.id
     const bloodType = req.body.bloodType
 
-    const hemocomponent = await queries.createHemocomponent({ id, bloodType })
+    const data = await blockchain.getData(blockchain.getAddress(id))
+    if (data[0]) {
+      throw new CustomError('Ya existe un hemocomponente con este id', 422)
+    }
     sendMessage('SAVED_HEMOCOMPONENT_DB', {
       owner: req.user?.email,
-      ...hemocomponent.toObject(),
+      id,
+      bloodType,
     })
 
-    res.status(200).json(hemocomponent)
+    res.status(200).json({ id, bloodType })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
@@ -49,21 +53,46 @@ export const updateHemocomponent = async function (
     const id = req.body.id
     const bloodType = req.body.bloodType
 
-    let hemocomponent = await queries.findHemocomponentById(id)
-    if (!hemocomponent) {
-      throw new CustomError('No se encuentra el hemocomponente con ese id', 404)
+    const data = await blockchain.getData(blockchain.getAddress(id))
+    if (!data[0]) {
+      throw new CustomError(
+        'No se encuentra un hemocomponente con este id',
+        404
+      )
     }
-    hemocomponent.bloodType = bloodType
-    hemocomponent.savedInBlockchain = false
-    hemocomponent = await hemocomponent.save()
 
     sendMessage('UPDATED_HEMOCOMPONENT_DB', {
       owner: req.user?.email,
-      ...hemocomponent.toObject(),
+      id,
+      bloodType,
     })
 
-    res.status(200).json(hemocomponent)
+    res.status(200).json({ id, bloodType })
   } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    throw err
+  }
+}
+
+/**
+ * Busca todos los hemocomponentes
+ * @param req.body.email email del usuario
+ * @param req.body.password contraseña del usuario
+ */
+export const getHemocomponentById = async function (
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  try {
+    const data = await blockchain.getData(blockchain.getAddress(req.params.id))
+    if (!data[0]) {
+      res.status(200).json(null)
+    }
+    res.status(201).json(data[0])
+  } catch (err) {
+    console.log(err)
     if (!err.statusCode) {
       err.statusCode = 500
     }
@@ -81,8 +110,9 @@ export const getAllHemocomponents = async function (
   res: express.Response
 ): Promise<void> {
   try {
-    const hemocomponents = await queries.findHemocomponents()
-    res.status(201).json(hemocomponents)
+    const data = await blockchain.getData(blockchain.getBase())
+    console.log(data)
+    res.status(201).json(data)
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {

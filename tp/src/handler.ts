@@ -62,16 +62,16 @@ const getServiceAddress = (service: Service, asset): string => {
   let prefix = ''
   switch (service) {
     case Service.Hemocomponents:
-      prefix = '001'
+      prefix = '0001'
       break
     case Service.Hospitals:
-      prefix = '002'
+      prefix = '0002'
       break
     case Service.Patients:
-      prefix = '003'
+      prefix = '0003'
       break
     case Service.Users:
-      prefix = '004'
+      prefix = '0004'
       break
   }
   if (!prefix) {
@@ -79,7 +79,7 @@ const getServiceAddress = (service: Service, asset): string => {
       `Service not in list, current value is: ${service}`
     )
   }
-  return INT_KEY_NAMESPACE + prefix + _hash(asset, 61)
+  return INT_KEY_NAMESPACE + prefix + _hash(asset, 60)
 }
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
@@ -107,9 +107,11 @@ const _applySet = (context, address, id, value) => (possibleAddressValues) => {
   let stateValueRep = possibleAddressValues[address]
 
   let stateValue
+  console.log('statevalue', stateValueRep)
   if (stateValueRep && stateValueRep.length > 0) {
     stateValue = cbor.decodeFirstSync(stateValueRep)
     let stateName = stateValue[id]
+    console.log('stateName', stateName)
     if (stateName) {
       throw new InvalidTransaction(
         `Method is "set" but Name already in state, Name: ${id} Value: ${stateName}`
@@ -184,7 +186,7 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
           console.log(update)
           //
           // Validate the update
-          let id = update.payload?._id
+          let id = update.payload?.id
           console.log('objectiD', id)
           if (!id) {
             throw new InvalidTransaction('Name is required')
@@ -246,11 +248,11 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
           })
         })
         .catch((e) => {
-          console.log('fallé', e)
+          console.log('fallé1', e)
           return
         })
     } catch (e) {
-      console.log('fallé', e)
+      console.log('fallé2', e)
       return
     }
   }

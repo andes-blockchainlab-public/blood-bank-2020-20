@@ -17,11 +17,15 @@ const hash = (x, length = 64): string =>
 const INT_KEY_FAMILY = 'bloodbank'
 const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 
+export const getAddress = (id: string): string => {
+  return INT_KEY_NAMESPACE + '0001' + hash(id, 60)
+}
+
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = INT_KEY_NAMESPACE + '001' + hash(payload?._id, 61)
+  const address = getAddress(payload?.id)
   console.log('address send bc', address)
-  console.log('object id', payload?._id)
+  console.log('object id', payload?.id)
   payload = { ...payload, lastUpdated: new Date() }
   payload = { namespace: 'Hemocomponents', Method: method, payload }
 
@@ -102,4 +106,26 @@ export const sendBlockchain = (method: string, payload: any): void => {
     .catch((err) => {
       console.log(err)
     })
+}
+
+export const getBase = (): string => {
+  return INT_KEY_NAMESPACE + '0001'
+}
+
+export const getData = async (address: string): Promise<any[]> => {
+  const req = await axios.get(
+    `http://${process.env.DOCKER_HOST_IP}:8008/state?address=${address}`
+  )
+  console.log(req.data)
+
+  if (!req.data.data[0] || req.data.data[0].length === 0) {
+    return []
+  }
+  const resp: any[] = []
+  for (const element of req.data.data) {
+    const buff = Buffer.from(element.data, 'base64')
+    const data = cbor.decodeFirstSync(buff)
+    resp.push(Object.values(data)[0])
+  }
+  return resp
 }
