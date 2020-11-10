@@ -16,7 +16,7 @@ const INT_KEY_FAMILY = 'bloodbank'
 const PREFIX = hash(INT_KEY_FAMILY, 6)
 
 const NULL_BLOCK_ID = '0000000000000000'
-const stream = new Stream('tcp://' + process.env.DOCKER_HOST_IP + ':4004')
+const stream = new Stream(process.env.SAWTOOTH_VALIDATOR_URL!)
 
 const handleEvent = (msg): void => {
   // const mmm = EventList.decode(msg.content).events

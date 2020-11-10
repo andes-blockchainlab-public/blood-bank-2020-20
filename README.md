@@ -1,3 +1,37 @@
+##
+
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"email":"axficionado@hotmail.com","name":"Carlos Mario Sarmiento","role":"coordinador","password":"sasuke22"}' \
+  localhost:4000/api/auth/create
+
+
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"email":"axficionado@hotmail.com","password":"sasuke22"}' \
+  localhost:4000/api/auth
+
+curl --header "Content-Type: application/json" \
+  --header "Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF4ZmljaW9uYWRvQGhvdG1haWwuY29tIiwiaWQiOiI1ZmFhYThiMDgzM2Q2ODE4NWI1NGMzMzkiLCJyb2xlIjoiY29vcmRpbmFkb3IiLCJpYXQiOjE2MDUwMTk4NjAsImV4cCI6MTYwNTA2MzA2MH0.xt2bc-UaF8bpiuq7Bgg9Svc32qq-NNVnYM9wfkvMrGQ" \
+  --request POST \
+  --data '{"id":"2","bloodType":"O+"}' \
+  localhost:4000/api/hemocomponents
+
+
+
+curl --header "Content-Type: application/json" \
+  --header "Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImF4ZmljaW9uYWRvQGhvdG1haWwuY29tIiwiaWQiOiI1ZmFhYThiMDgzM2Q2ODE4NWI1NGMzMzkiLCJyb2xlIjoiY29vcmRpbmFkb3IiLCJpYXQiOjE2MDUwMTk4NjAsImV4cCI6MTYwNTA2MzA2MH0.xt2bc-UaF8bpiuq7Bgg9Svc32qq-NNVnYM9wfkvMrGQ" \
+  --request GET \
+  localhost:4000/api/hemocomponents/2
+
+
+
+Compile server
+```
+npm run build
+node ./dist/server.js
+```
+
 ## Use
 
 Must install docker-compose

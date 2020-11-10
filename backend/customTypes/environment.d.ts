@@ -8,12 +8,13 @@ export interface AuthUser {
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      DB_HOST: string
+      MONGO_URI: string
       BACK_URL: string
       NODE_ENV: 'development' | 'production' | 'verifier' | 'email'
       PRIVATE_KEY: string
       PUBLIC_KEY: string
-      DOCKER_HOST_IP: string
+      KAFKA_URL: string
+      SAWTOOTH_VALIDATOR_URL: string
     }
   }
   namespace Express {
