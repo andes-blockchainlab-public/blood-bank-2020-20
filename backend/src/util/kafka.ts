@@ -23,6 +23,7 @@ export const sendMessage = async (
   if (payload._id) {
     payload._id = payload._id.toString()
   }
+  payload.ips = process.env.ID_IPS
   const value = cbor.encode(JSON.parse(JSON.stringify(payload)))
   console.log('value to send', value)
   await producer.send({

@@ -27,6 +27,7 @@ export const createHemocomponent = async function (
     sendMessage('SAVED_HEMOCOMPONENT_DB', {
       owner: req.user?.email,
       id,
+      //IPS Agregar el id de la IPS
       bloodType,
     })
 

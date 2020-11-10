@@ -15,10 +15,11 @@ const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
 const INT_KEY_FAMILY = 'bloodbank'
+const ID_IPS = process.env.ID_IPS
 const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 
 export const getAddress = (id: string): string => {
-  return INT_KEY_NAMESPACE + '0001' + hash(id, 60)
+  return INT_KEY_NAMESPACE + ID_IPS + '0001' + hash(id, 60)
 }
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -109,7 +110,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
 }
 
 export const getBase = (): string => {
-  return INT_KEY_NAMESPACE + '0001'
+  return INT_KEY_NAMESPACE + ID_IPS + '0001'
 }
 
 export const getData = async (address: string): Promise<any[]> => {
