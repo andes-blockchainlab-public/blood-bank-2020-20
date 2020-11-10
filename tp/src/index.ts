@@ -17,15 +17,15 @@
 
 'use strict'
 
+require('dotenv').config();
+
 import { TransactionProcessor } from 'sawtooth-sdk/processor'
 import { HemocomponentsKeyHandler } from './handler'
-import { initKafkaConnect } from './util/kafka'
 
-const VALIDATOR_URL = 'tcp://' + process.env.DOCKER_HOST_IP + ':4004'
-console.log(VALIDATOR_URL)
+console.log(process.env.VALIDATOR)
 
-const transactionProcessor = new TransactionProcessor(VALIDATOR_URL)
+const transactionProcessor = new TransactionProcessor(process.env.VALIDATOR)
 
 transactionProcessor.addHandler(new HemocomponentsKeyHandler())
 
-initKafkaConnect().then(transactionProcessor.start())
+transactionProcessor.start()

@@ -26,8 +26,6 @@ import {
 
 import crypto from 'crypto'
 import cbor from 'cbor'
-import { sendKafkaMessage } from './util/kafka'
-// import { initKafkaConnect, receiveMessage } from './util/kafka'
 
 const _hash = (x, length = 64) =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
@@ -153,17 +151,6 @@ const _applyUpdate = (context, address, id, value) => (
 
   return _setEntry(context, address, stateValue)
 }
-/** 
-initKafkaConnect().then(() => {
-  receiveMessage('SAVED_HEMOCOMPONENT_DB', async ({ topic, partition, message }) => {
-    console.log({
-      topic,
-      partition,
-      offset: message.offset,
-      value: message?.value?.toString(),
-    })
-  })
-})*/
 
 export class HemocomponentsKeyHandler extends TransactionHandler {
   constructor() {
@@ -232,11 +219,7 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
           return actionPromise.then((addresses) => {
             if (addresses.length === 0) {
               throw new InternalError('State Error!')
-            } /*else if (verb === 'set') {
-              sendKafkaMessage('SAVED_HEMOCOMPONENT_BC', value)
-            } else {
-              sendKafkaMessage('UPDATED_HEMOCOMPONENT_BC', value)
-            }*/
+            }
             console.log(`Method: ${verb} Name: ${id} Value: ${value}`)
             console.log(
               context.addEvent(

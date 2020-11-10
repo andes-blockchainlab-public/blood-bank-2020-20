@@ -17,17 +17,17 @@ const hash = (x, length = 64): string =>
 const INT_KEY_FAMILY = 'bloodbank'
 const PREFIX = hash(INT_KEY_FAMILY, 6)
 
-const stream = new Stream('tcp://' + process.env.DOCKER_HOST_IP + ':4004')
+const stream = new Stream(process.env.SAWTOOTH_VALIDATOR_URL!)
 
 const parseBlockCommit = async (blockId: string): Promise<string> => {
   console.log('llega blockId', blockId)
   const block = await axios.get(
-    `http://${process.env.DOCKER_HOST_IP}:8008/blocks?id=${blockId}`
+    `${process.env.SAWTOOTH_REST_API_URL!}/blocks?id=${blockId}`
   )
   console.log('data del bloque', block.data)
   const batchId = block.data.data[0].batches[0].header_signature
   const batch = await axios.get(
-    `http://${process.env.DOCKER_HOST_IP}:8008/batch_statuses?id=${batchId}`
+    `${process.env.SAWTOOTH_REST_API_URL!}/batch_statuses?id=${batchId}`
   )
   console.log('llega batch', batch.data)
   if (batch.data.data[0].status !== 'COMMITTED') {

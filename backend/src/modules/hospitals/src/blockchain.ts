@@ -8,7 +8,7 @@ const context = createContext('secp256k1')
 const privateKey = context.newRandomPrivateKey()
 const signer = new CryptoFactory(context).newSigner(privateKey)
 
-const HOST = 'http://' + process.env.DOCKER_HOST_IP + ':8008'
+const HOST = process.env.SAWTOOTH_REST_API_URL!
 // const HOST = 'http://192.168.99.100:30008';
 
 const hash = (x, length = 64): string =>

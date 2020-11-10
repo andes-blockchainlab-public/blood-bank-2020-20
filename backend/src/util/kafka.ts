@@ -6,7 +6,7 @@ import { activatePatientListeners } from '../modules/patients/src/kafkaListeners
 
 const kafka = new Kafka({
   clientId: 'Blood-Bank',
-  brokers: [process.env.DOCKER_HOST_IP + ':9092'],
+  brokers: [process.env.KAFKA_URL!],
 })
 
 const producer = kafka.producer()
