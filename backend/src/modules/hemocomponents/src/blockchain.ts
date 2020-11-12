@@ -19,7 +19,7 @@ const ID_IPS = process.env.ID_IPS
 const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 
 export const getAddress = (id: string): string => {
-  return INT_KEY_NAMESPACE + ID_IPS + '0001' + hash(id, 60)
+  return INT_KEY_NAMESPACE + '0001' + ID_IPS + hash(id, 60)
 }
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */

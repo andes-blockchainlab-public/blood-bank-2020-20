@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config()
 
 import './util/envs'
 import express from 'express'

@@ -16,10 +16,11 @@ const hash = (x, length = 64): string =>
 
 const INT_KEY_FAMILY = 'bloodbank'
 const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
+const ID_IPS = process.env.ID_IPS
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = INT_KEY_NAMESPACE + '0003' + hash(payload?._id, 60)
+  const address = INT_KEY_NAMESPACE + '0003' + ID_IPS + hash(payload?._id, 60)
   console.log('address send bc', address)
   console.log('object id', payload?._id)
   payload = { ...payload, lastUpdated: new Date() }
