@@ -10,6 +10,7 @@ import {
   ClientEventsSubscribeRequest,
   ClientEventsSubscribeResponse,
 } from 'sawtooth-sdk/protobuf'
+import { sendMessage } from '../../../util/kafka'
 
 const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
@@ -42,9 +43,9 @@ const checkServiceData = async (payload: string): Promise<void> => {
   console.log(payload)
   const buff = Buffer.from(payload, 'base64')
   const data = cbor.decodeFirstSync(buff)
-  console.log(data)
+  console.log('Info recibida:', data)
   if (data.namespace === 'Hemocomponents') {
-    console.log('its a me')
+    sendMessage('SAVED_HEMOCOMPONENT_BC', data)
   }
 }
 
@@ -94,7 +95,6 @@ const subscribe = (): void => {
       }),
     ],
   })
-
   const mySub = EventSubscription.create({
     eventType: 'myevent',
   })

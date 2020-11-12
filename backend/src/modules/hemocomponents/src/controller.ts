@@ -19,18 +19,20 @@ export const createHemocomponent = async function (
   try {
     const id = req.body.id
     const bloodType = req.body.bloodType
-
+    console.log('Llego acá controller 1')
     const data = await blockchain.getData(blockchain.getAddress(id))
+    console.log('Llego acá controller data:', data)
     if (data[0]) {
       throw new CustomError('Ya existe un hemocomponente con este id', 422)
     }
+    console.log('Llego acá controller 2')
     sendMessage('SAVE_HEMOCOMPONENT', {
       owner: req.user?.email,
+      ips: process.env.ID_IPS,
       id,
-      //IPS Agregar el id de la IPS
       bloodType,
     })
-
+    console.log('Llego acá controller 3')
     res.status(200).json({ id, bloodType })
   } catch (err) {
     if (!err.statusCode) {
@@ -62,8 +64,9 @@ export const updateHemocomponent = async function (
       )
     }
 
-    sendMessage('UPDATED_HEMOCOMPONENT_DB', {
+    sendMessage('UPDATE_HEMOCOMPONENT', {
       owner: req.user?.email,
+      ips: process.env.ID_IPS,
       id,
       bloodType,
     })

@@ -15,12 +15,13 @@ const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
 const INT_KEY_FAMILY = 'bloodbank'
-const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
+const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 4)
 const ID_IPS = process.env.ID_IPS
+const INT_KEY_IPS = hash(ID_IPS, 4)
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = INT_KEY_NAMESPACE + '0002' + ID_IPS + hash(payload?._id, 60)
+  const address = INT_KEY_NAMESPACE + '0002' + INT_KEY_IPS + hash(payload?._id, 58)
   console.log('address send bc', address)
   console.log('object id', payload?._id)
   payload = { ...payload, lastUpdated: new Date() }
