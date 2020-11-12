@@ -112,14 +112,24 @@ services:
       \""
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-dev
+    ports:
+      - 4000:4000
     env_file:
-      - .env.dev
+      - ./backend/.env.dev
+    volumes:
+      - ./tp/src:./src
 
   tp:
-    build: ./tp
+    build:
+      context: ./tp
+      dockerfile: Dockerfile-dev
     env_file:
-      - .env.dev
+      - ./tp/.env.dev
+    volumes:
+      - ./tp/src:./src
 # volumes:
 #   zookeeper_data:
 #     # driver: local
