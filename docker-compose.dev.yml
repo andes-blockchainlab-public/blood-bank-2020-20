@@ -22,7 +22,7 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://kafka:9093
       - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
@@ -111,25 +111,31 @@ services:
       tail -f /dev/null \
       \""
 
-  backend:
+  backend-dev:
     build:
       context: ./backend
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile.dev
     ports:
       - 4000:4000
     env_file:
-      - ./backend/.env.dev
+      - ./backend/.env-docker.dev
     volumes:
-      - ./tp/src:./src
+      - ./backend/src:/usr/src/app/src
+    depends_on:
+      - mongo
+      - kafka
+      - shell
 
-  tp:
+  tp-dev:
     build:
       context: ./tp
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile.dev
     env_file:
-      - ./tp/.env.dev
+      - ./tp/.env-docker.dev
     volumes:
-      - ./tp/src:./src
+      - ./tp/src:/usr/src/app/src
+    depends_on:
+      - shell
 # volumes:
 #   zookeeper_data:
 #     # driver: local

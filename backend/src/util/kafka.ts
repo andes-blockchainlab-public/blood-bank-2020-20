@@ -4,6 +4,7 @@ import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/
 import { activateHospitalListeners } from '../modules/hospitals/src/kafkaListeners'
 import { activatePatientListeners } from '../modules/patients/src/kafkaListeners'
 
+console.log('kafka url', process.env.KAFKA_URL)
 const kafka = new Kafka({
   clientId: 'Blood-Bank',
   brokers: [process.env.KAFKA_URL!],

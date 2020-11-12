@@ -15,12 +15,12 @@ const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
 const INT_KEY_FAMILY = 'bloodbank'
-const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 4)
+const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 const ID_IPS = process.env.ID_IPS
 const INT_KEY_IPS = hash(ID_IPS, 4)
 
 export const getAddress = (id: string): string => {
-  return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS + hash(id, 58)
+  return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS + hash(id, 56)
 }
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -98,6 +98,8 @@ export const sendBlockchain = (method: string, payload: any): void => {
     batches: [batch],
   }).finish()
 
+  console.log('ips id', ID_IPS)
+
   axios
     .post(`${HOST}/batches`, batchListBytes, {
       headers: { 'Content-Type': 'application/octet-stream' },
@@ -111,7 +113,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
 }
 
 export const getBase = (): string => {
-  return INT_KEY_NAMESPACE + ID_IPS + '0001'
+  return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS
 }
 
 export const getData = async (address: string): Promise<any[]> => {

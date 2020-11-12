@@ -90,7 +90,8 @@ export const getHemocomponentById = async function (
   res: express.Response
 ): Promise<void> {
   try {
-    const data = await blockchain.getData(blockchain.getAddress(req.params.id))
+    const id = req.params.id
+    const data = await blockchain.getData(blockchain.getAddress(id))
     if (!data[0]) {
       res.status(200).json(null)
     }

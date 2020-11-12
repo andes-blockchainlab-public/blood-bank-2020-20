@@ -56,7 +56,7 @@ const getService = (namespace: string): Service => {
   )
 }
 
-const getServiceAddress = (service: Service, asset): string => {
+const getServiceAddress = (service: Service, ipsId: string, asset): string => {
   let prefix = ''
   switch (service) {
     case Service.Hemocomponents:
@@ -77,7 +77,8 @@ const getServiceAddress = (service: Service, asset): string => {
       `Service not in list, current value is: ${service}`
     )
   }
-  return INT_KEY_NAMESPACE + prefix + _hash(asset, 60)
+  console.log('ips id', ipsId)
+  return INT_KEY_NAMESPACE + prefix + _hash(ipsId, 4) + _hash(asset, 56)
 }
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
@@ -202,8 +203,8 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
 
           console.log('namespace', update.namespace)
           const service = getService(update.namespace)
-
-          let address = getServiceAddress(service, id)
+          const ipsId = update.payload?.ips
+          let address = getServiceAddress(service, ipsId, id)
           console.log(address)
 
           // Get the current state, for the key's address:

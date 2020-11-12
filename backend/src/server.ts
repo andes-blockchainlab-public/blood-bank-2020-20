@@ -1,6 +1,5 @@
-require('dotenv').config()
+if (process.env.MODE !== 'docker') require('dotenv').config()
 
-import './util/envs'
 import express from 'express'
 import cors from 'cors'
 require('cross-fetch/polyfill')

@@ -1,7 +1,7 @@
 import cbor from 'cbor'
 import { receiveMessage } from '../../../util/kafka'
 import { sendBlockchain } from './blockchain'
-import { updateObjectBlockchainStatus } from './queries'
+// import { updateObjectBlockchainStatus } from './queries'
 
 export const activateHemocomponentsKafkaListeners = (): void => {
   receiveMessage('SAVE_HEMOCOMPONENT', async (payload) => {
@@ -14,10 +14,10 @@ export const activateHemocomponentsKafkaListeners = (): void => {
 
   receiveMessage('SAVED_HEMOCOMPONENT_BC', async (payload) => {
     console.log('Logrado', payload?.message?.value)
-    if (payload.message.value) {
+    /* if (payload.message.value) {
       const obj = cbor.decodeFirstSync(payload.message?.value)
       await updateObjectBlockchainStatus(obj, true)
-    }
+    }*/
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 
   receiveMessage('UPDATE_HEMOCOMPONENT', async (payload) => {
@@ -30,9 +30,9 @@ export const activateHemocomponentsKafkaListeners = (): void => {
 
   receiveMessage('UPDATED_HEMOCOMPONENT_BC', async (payload) => {
     console.log('payload4', payload?.message?.value)
-    if (payload.message.value) {
+    /* if (payload.message.value) {
       const obj = cbor.decodeFirstSync(payload.message?.value)
       await updateObjectBlockchainStatus(obj, true)
-    }
+    }*/
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 }

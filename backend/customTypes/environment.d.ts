@@ -15,6 +15,7 @@ declare global {
       PUBLIC_KEY: string
       KAFKA_URL: string
       SAWTOOTH_VALIDATOR_URL: string
+      MODE: string
     }
   }
   namespace Express {
