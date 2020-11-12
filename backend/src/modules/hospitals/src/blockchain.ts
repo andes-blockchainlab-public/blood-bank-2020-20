@@ -21,7 +21,8 @@ const INT_KEY_IPS = hash(ID_IPS, 4)
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = INT_KEY_NAMESPACE + '0002' + INT_KEY_IPS + hash(payload?._id, 58)
+  const address =
+    INT_KEY_NAMESPACE + '0002' + INT_KEY_IPS + hash(payload?._id, 58)
   console.log('address send bc', address)
   console.log('object id', payload?._id)
   payload = { ...payload, lastUpdated: new Date() }
