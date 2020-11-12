@@ -24,7 +24,7 @@ export const createHemocomponent = async function (
     if (data[0]) {
       throw new CustomError('Ya existe un hemocomponente con este id', 422)
     }
-    sendMessage('SAVED_HEMOCOMPONENT_DB', {
+    sendMessage('SAVE_HEMOCOMPONENT', {
       owner: req.user?.email,
       id,
       //IPS Agregar el id de la IPS

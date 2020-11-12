@@ -4,7 +4,7 @@ import { sendBlockchain } from './blockchain'
 import { updateObjectBlockchainStatus } from './queries'
 
 export const activateHemocomponentsKafkaListeners = (): void => {
-  receiveMessage('SAVED_HEMOCOMPONENT_DB', async (payload) => {
+  receiveMessage('SAVE_HEMOCOMPONENT', async (payload) => {
     console.log('payload1', payload?.message?.value)
     if (payload.message.value) {
       console.log(cbor.decodeFirstSync(payload.message?.value))
