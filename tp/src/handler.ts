@@ -180,9 +180,7 @@ const _applyTest = (context, address, id, value) => (possibleAddressValues) => {
 const _applyTransfusionPatient = (context, address, id, value) => (
   possibleAddressValues
 ) => {
-  console.log('entro entro')
   let stateValueRep = possibleAddressValues[address]
-  console.log('2', stateValueRep)
 
   let stateValue
   if (stateValueRep && stateValueRep.length > 0) {
@@ -215,7 +213,6 @@ const _applyTransfusionHemocomponent = (context, address, id, value) => (
   possibleAddressValues
 ) => {
   let stateValueRep = possibleAddressValues[address]
-  console.log('1', stateValueRep)
   let stateValue
   if (stateValueRep && stateValueRep.length > 0) {
     stateValue = cbor.decodeFirstSync(stateValueRep)
@@ -236,6 +233,81 @@ const _applyTransfusionHemocomponent = (context, address, id, value) => (
 
   const hemocomponent = stateValue[id]
   hemocomponent.transfusion = value
+  hemocomponent.lastUpdated = value.lastUpdated
+  stateValue[id] = hemocomponent
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyAdverseReactionPatient = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  console.log('entro entro 1.5')
+
+  let stateValueRep = possibleAddressValues[address]
+  console.log('3', stateValueRep)
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.ips
+  delete value.patientId
+
+  const patient = stateValue[id]
+
+  const transfusionId = patient.transfusions.findIndex(
+    (trans) => trans.hemocomponentId === value.hemocomponentId
+  )
+  delete value.hemocomponentId
+
+  const transfusion = patient.transfusions[transfusionId]
+  transfusion.adverseReactions.push(value)
+  patient.lastUpdated = value.lastUpdated
+  patient.transfusions[transfusionId] = patient.transfusions[transfusionId]
+  stateValue[id] = patient
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyAdverseReactionHemocomponents = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  console.log('entro entro 2')
+
+  let stateValueRep = possibleAddressValues[address]
+  console.log('4', stateValueRep)
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.hemocomponentId
+  delete value.ips
+  delete value.patientId
+
+  const hemocomponent = stateValue[id]
+  hemocomponent.transfusion.adverseReactions.push(value)
   hemocomponent.lastUpdated = value.lastUpdated
   stateValue[id] = hemocomponent
 
@@ -287,6 +359,7 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
 
           // Determine the action to apply based on the verb
           let actionFn
+          let actionFn2
           if (verb === 'set') {
             actionFn = _applySet
           } else if (verb === 'update') {
@@ -294,8 +367,11 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
           } else if (verb === 'test') {
             actionFn = _applyTest
           } else if (verb === 'transfer') {
-            console.log('entra transfusion')
             actionFn = _applyTransfusionPatient
+            actionFn2 = _applyTransfusionHemocomponent
+          } else if (verb === 'adverse') {
+            actionFn = _applyAdverseReactionPatient
+            actionFn2 = _applyAdverseReactionHemocomponents
           } else {
             throw new InvalidTransaction(`Method must be set, not ${verb}`)
           }
@@ -339,7 +415,7 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
 
             actionPromise = getPromise
               .then(
-                _applyTransfusionHemocomponent(
+                actionFn2(
                   context,
                   address.hemocomponentAddress,
                   id.hemocomponentId,

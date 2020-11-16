@@ -4,7 +4,15 @@ import * as hecomponent from './controller'
 import { exceptionHandler } from '../../../util/errorHandler'
 export const router = express.Router()
 
-// Crear hemocomponente
+// Crear reacción adversa
+router.post(
+  '/adverse',
+  validate('adverse'),
+  verifyUser,
+  exceptionHandler(hecomponent.addAdverseReaction)
+)
+
+// Crear transfusión
 router.post(
   '/',
   validate('create'),
