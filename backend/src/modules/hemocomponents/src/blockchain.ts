@@ -100,6 +100,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
 
   console.log('ips id', ID_IPS)
 
+  console.log('batch', batchListBytes.length)
   axios
     .post(`${HOST}/batches`, batchListBytes, {
       headers: { 'Content-Type': 'application/octet-stream' },

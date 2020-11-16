@@ -24,7 +24,9 @@ import { HemocomponentsKeyHandler } from './handler'
 
 console.log('this is the validator', process.env.VALIDATOR)
 
-const transactionProcessor = new TransactionProcessor(process.env.VALIDATOR)
+const transactionProcessor = new TransactionProcessor(
+  process.env.VALIDATOR || 'tcp://localhost:4004'
+)
 
 transactionProcessor.addHandler(new HemocomponentsKeyHandler())
 

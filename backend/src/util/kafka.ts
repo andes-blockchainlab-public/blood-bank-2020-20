@@ -1,8 +1,7 @@
 import cbor from 'cbor'
 import { Kafka, EachMessagePayload } from 'kafkajs'
 import { activateHemocomponentsKafkaListeners } from '../modules/hemocomponents/src/kafkaListeners'
-import { activateHospitalListeners } from '../modules/hospitals/src/kafkaListeners'
-import { activatePatientListeners } from '../modules/patients/src/kafkaListeners'
+import { activatePatientsKafkaListeners } from '../modules/patients/src/kafkaListeners'
 
 console.log('kafka url', process.env.KAFKA_URL)
 const kafka = new Kafka({
@@ -46,6 +45,5 @@ export const receiveMessage = async (
 
 export const activateKafkaListeners = async (): Promise<void> => {
   activateHemocomponentsKafkaListeners()
-  activateHospitalListeners()
-  activatePatientListeners()
+  activatePatientsKafkaListeners()
 }

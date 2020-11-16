@@ -15,20 +15,26 @@ const hash = (x, length = 64): string =>
   crypto.createHash('sha512').update(x).digest('hex').slice(0, length)
 
 const INT_KEY_FAMILY = 'bloodbank'
-const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 4)
+const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 const ID_IPS = process.env.ID_IPS
 const INT_KEY_IPS = hash(ID_IPS, 4)
 
+export const getAddress = (id: string): string => {
+  return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS + hash(id, 56)
+}
+
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address =
-    INT_KEY_NAMESPACE + '0002' + INT_KEY_IPS + hash(payload?._id, 58)
+  const address = getAddress(payload?.id)
   console.log('address send bc', address)
-  console.log('object id', payload?._id)
+  console.log('object id', payload?.id)
   payload = { ...payload, lastUpdated: new Date() }
-  payload = { namespace: 'Hospitals', Method: method, payload }
+  payload = { namespace: 'Hemocomponents', Method: method, payload }
 
   const payloadBytes = cbor.encode(payload)
+
+  console.log('Payload bytes', payloadBytes)
+  console.log(payloadBytes.toString('ascii'))
 
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: 'bloodbank',
@@ -92,6 +98,8 @@ export const sendBlockchain = (method: string, payload: any): void => {
     batches: [batch],
   }).finish()
 
+  console.log('ips id', ID_IPS)
+
   axios
     .post(`${HOST}/batches`, batchListBytes, {
       headers: { 'Content-Type': 'application/octet-stream' },
@@ -102,4 +110,28 @@ export const sendBlockchain = (method: string, payload: any): void => {
     .catch((err) => {
       console.log(err)
     })
+}
+
+export const getBase = (): string => {
+  return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS
+}
+
+export const getData = async (address: string): Promise<any[]> => {
+  console.log('variable:', process.env.SAWTOOTH_REST_API_URL)
+  const url = `${process.env.SAWTOOTH_REST_API_URL!}/state?address=${address}`
+  console.log('Url:', url)
+  const req = await axios.get(url)
+  console.log(req.data)
+
+  if (!req.data.data[0] || req.data.data[0].length === 0) {
+    return []
+  }
+  const resp: any[] = []
+  for (const element of req.data.data) {
+    const buff = Buffer.from(element.data, 'base64')
+    const data = cbor.decodeFirstSync(buff)
+    resp.push(Object.values(data)[0])
+  }
+  console.log('Resp:', resp)
+  return resp
 }

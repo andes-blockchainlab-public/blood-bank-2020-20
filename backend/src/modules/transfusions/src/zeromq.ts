@@ -44,8 +44,8 @@ const checkServiceData = async (payload: string): Promise<void> => {
   const buff = Buffer.from(payload, 'base64')
   const data = cbor.decodeFirstSync(buff)
   console.log('Info recibida:', data)
-  if (data.namespace === 'Patients') {
-    sendMessage('SAVED_PATIENT_BC', data)
+  if (data.namespace === 'Hemocomponents') {
+    sendMessage('SAVED_HEMOCOMPONENT_BC', data)
   }
 }
 
@@ -56,7 +56,7 @@ const handleEvent = (msg): void => {
     const events = EventList.decode(msg.content).events
     console.log(events)
     events.forEach((e) => {
-      //console.log('llega evento pacientes', e.eventType)
+      //console.log('llega evento hemocomponentes', e.eventType)
       if (e.eventType == 'myevent') {
         console.log(e)
         console.log('data:', Buffer.from(e.data, 'utf8').toString('utf8'))
@@ -118,7 +118,7 @@ const subscribe = (): void => {
     })
 }
 
-export const activatePatientsBCEventistener = async (): Promise<void> => {
+export const activateHemocomponentsBCEventistener = async (): Promise<void> => {
   stream.connect(() => {
     stream.onReceive(handleEvent)
     subscribe()

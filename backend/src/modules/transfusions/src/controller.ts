@@ -7,11 +7,11 @@ import { CustomError } from '../../../util/errorHandler'
 import * as blockchain from './blockchain'
 
 /**
- * Crea un paciente
+ * Crea un hemocomponente
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
-export const createPatient = async function (
+export const createHemocomponent = async function (
   req: express.Request,
   res: express.Response
 ): Promise<void> {
@@ -19,23 +19,21 @@ export const createPatient = async function (
   try {
     const id = req.body.id
     const bloodType = req.body.bloodType
-    const name = req.body.name
     console.log('Llego acá controller 1')
     const data = await blockchain.getData(blockchain.getAddress(id))
     console.log('Llego acá controller data:', data)
     if (data[0]) {
-      throw new CustomError('Ya existe un paciente con este id', 422)
+      throw new CustomError('Ya existe un hemocomponente con este id', 422)
     }
     console.log('Llego acá controller 2')
-    sendMessage('SAVE_PATIENT', {
+    sendMessage('SAVE_HEMOCOMPONENT', {
       owner: req.user?.email,
       ips: process.env.ID_IPS,
       id,
       bloodType,
-      name,
     })
     console.log('Llego acá controller 3')
-    res.status(200).json({ id, bloodType, name })
+    res.status(200).json({ id, bloodType })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
@@ -45,11 +43,11 @@ export const createPatient = async function (
 }
 
 /**
- * Actualiza un paciente
+ * Actualiza un hemocomponente
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
-export const updatePatient = async function (
+export const updateHemocomponent = async function (
   req: express.Request,
   res: express.Response
 ): Promise<void> {
@@ -60,10 +58,13 @@ export const updatePatient = async function (
 
     const data = await blockchain.getData(blockchain.getAddress(id))
     if (!data[0]) {
-      throw new CustomError('No se encuentra un paciente con este id', 404)
+      throw new CustomError(
+        'No se encuentra un hemocomponente con este id',
+        404
+      )
     }
 
-    sendMessage('UPDATE_PATIENT', {
+    sendMessage('UPDATE_HEMOCOMPONENT', {
       owner: req.user?.email,
       ips: process.env.ID_IPS,
       id,
@@ -80,11 +81,11 @@ export const updatePatient = async function (
 }
 
 /**
- * Busca todos los pacientes
+ * Busca todos los hemocomponentes
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
-export const getPatientById = async function (
+export const getHemocomponentById = async function (
   req: express.Request,
   res: express.Response
 ): Promise<void> {
@@ -105,11 +106,11 @@ export const getPatientById = async function (
 }
 
 /**
- * Busca todos los pacientes
+ * Busca todos los hemocomponentes
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
-export const getAllPatients = async function (
+export const getAllHemocomponents = async function (
   req: express.Request,
   res: express.Response
 ): Promise<void> {

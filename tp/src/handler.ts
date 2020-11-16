@@ -35,21 +35,16 @@ const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY, 6)
 
 enum Service {
   Hemocomponents,
-  Hospitals,
   Patients,
-  Users,
+  Transfusions,
 }
 
 const getService = (namespace: string): Service => {
   switch (namespace) {
     case 'Hemocomponents':
       return Service.Hemocomponents
-    case 'Hospitals':
-      return Service.Hospitals
     case 'Patients':
       return Service.Patients
-    case 'Users':
-      return Service.Users
   }
   throw new InvalidTransaction(
     `Namespace not in service, current namespace value is: ${namespace}`
@@ -62,14 +57,8 @@ const getServiceAddress = (service: Service, ipsId: string, asset): string => {
     case Service.Hemocomponents:
       prefix = '0001'
       break
-    case Service.Hospitals:
-      prefix = '0002'
-      break
     case Service.Patients:
-      prefix = '0003'
-      break
-    case Service.Users:
-      prefix = '0004'
+      prefix = '0002'
       break
   }
   if (!prefix) {

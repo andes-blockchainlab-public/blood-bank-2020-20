@@ -30,17 +30,24 @@ export const verifyUser = async (
   res: express.Response,
   next: express.NextFunction
 ): Promise<void> => {
-  const headers = new Headers()
-  headers.set('Authorization', req.headers['authorization'] as string)
+  try {
+    const headers = new Headers()
+    headers.set('Authorization', req.headers['authorization'] as string)
 
-  const response = await fetch(`${process.env.BACK_URL!}auth/user`, {
-    method: 'POST',
-    headers,
-  })
-  if (!response.ok) {
-    res.status(401).json(await response.json())
-    return
+    const response = await fetch(
+      `${process.env.BACK_URL!}servicio-transfusion/auth/user`,
+      {
+        method: 'POST',
+        headers,
+      }
+    )
+    if (!response.ok) {
+      res.status(401).json(await response.json())
+      return
+    }
+    req.user = await response.json()
+    next()
+  } catch (err) {
+    next({ message: 'Token inválido', statusCode: 401 })
   }
-  req.user = await response.json()
-  next()
 }
