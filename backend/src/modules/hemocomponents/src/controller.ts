@@ -26,14 +26,23 @@ export const createHemocomponent = async function (
       throw new CustomError('Ya existe un hemocomponente con este id', 422)
     }
     console.log('Llego acá controller 2')
-    sendMessage('SAVE_HEMOCOMPONENT', {
-      owner: req.user?.email,
+    sendMessage('SAVED_HEMOCOMPONENT', {
+      author: req.user?.email,
       ips: process.env.ID_IPS,
       id,
       bloodType,
+      pruebas: [],
+      pacienteTransfundido: null,
+      efectosAversos: [],
     })
     console.log('Llego acá controller 3')
-    res.status(200).json({ id, bloodType })
+    res.status(200).json({
+      id,
+      bloodType,
+      pruebas: [],
+      pacienteTransfundido: null,
+      efectosAversos: null,
+    })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
@@ -64,8 +73,8 @@ export const updateHemocomponent = async function (
       )
     }
 
-    sendMessage('UPDATE_HEMOCOMPONENT', {
-      owner: req.user?.email,
+    sendMessage('UPDATED_HEMOCOMPONENT', {
+      author: req.user?.email,
       ips: process.env.ID_IPS,
       id,
       bloodType,
@@ -120,6 +129,44 @@ export const getAllHemocomponents = async function (
     res.status(201).json(data)
   } catch (err) {
     console.log(err)
+    if (!err.statusCode) {
+      err.statusCode = 500
+    }
+    throw err
+  }
+}
+
+/**
+ * Actualiza un hemocomponente
+ * @param req.body.email email del usuario
+ * @param req.body.password contraseña del usuario
+ */
+export const addHemocomponentTests = async function (
+  req: express.Request,
+  res: express.Response
+): Promise<void> {
+  validationErrorHandler(req)
+  try {
+    const id = req.body.hemocomponentId
+    const passed = req.body.passed
+
+    const data = await blockchain.getData(blockchain.getAddress(id))
+    if (!data[0]) {
+      throw new CustomError(
+        'No se encuentra un hemocomponente con este id',
+        404
+      )
+    }
+
+    sendMessage('ADDED_TEST_HEMOCOMPONENT', {
+      author: req.user?.email,
+      ips: process.env.ID_IPS,
+      id,
+      passed,
+    })
+
+    res.status(200).json({ id, passed })
+  } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
     }

@@ -2,7 +2,7 @@ import { body, ValidationChain, validationResult } from 'express-validator'
 import express from 'express'
 import { Middleware } from 'express-validator/src/base'
 export const validate = (
-  method: 'create' | 'update'
+  method: 'create' | 'update' | 'tests'
 ): Array<ValidationChain | Middleware> => {
   switch (method) {
     case 'create': {
@@ -15,6 +15,18 @@ export const validate = (
       return [
         body('id', 'Debe ingresar un id válido').exists(),
         body('bloodType', 'Debe ingresar un tipo de sangre válido').exists(),
+      ]
+    }
+    case 'tests': {
+      return [
+        body(
+          'hemocomponentId',
+          'Debe ingresar un id de hemocomponente válido'
+        ).exists(),
+        body('passed', 'Debe ingresar si pasó las pruebas')
+          .exists()
+          .isBoolean()
+          .withMessage('El valor debe ser un booleano'),
       ]
     }
   }

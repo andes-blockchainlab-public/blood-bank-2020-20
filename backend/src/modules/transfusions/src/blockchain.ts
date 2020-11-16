@@ -19,17 +19,22 @@ const INT_KEY_NAMESPACE = hash(INT_KEY_FAMILY, 6)
 const ID_IPS = process.env.ID_IPS
 const INT_KEY_IPS = hash(ID_IPS, 4)
 
-export const getAddress = (id: string): string => {
+export const getHemocomponentsAddress = (id: string): string => {
   return INT_KEY_NAMESPACE + '0001' + INT_KEY_IPS + hash(id, 56)
+}
+
+export const getPatientsAddress = (id: string): string => {
+  return INT_KEY_NAMESPACE + '0002' + INT_KEY_IPS + hash(id, 56)
 }
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 export const sendBlockchain = (method: string, payload: any): void => {
-  const address = getAddress(payload?.id)
-  console.log('address send bc', address)
+  const address1 = getHemocomponentsAddress(payload?.hemocomponentId)
+  const address2 = getPatientsAddress(payload?.patientId)
+  console.log('address send bc', address1)
   console.log('object id', payload?.id)
   payload = { ...payload, lastUpdated: new Date() }
-  payload = { namespace: 'Hemocomponents', Method: method, payload }
+  payload = { namespace: 'Transfusions', Method: method, payload }
 
   const payloadBytes = cbor.encode(payload)
 
@@ -39,8 +44,8 @@ export const sendBlockchain = (method: string, payload: any): void => {
   const transactionHeaderBytes = protobuf.TransactionHeader.encode({
     familyName: 'bloodbank',
     familyVersion: '1.0',
-    inputs: [address], //Lectura
-    outputs: [address], //Escritura
+    inputs: [address1, address2], //Lectura
+    outputs: [address1, address2], //Escritura
     signerPublicKey: signer.getPublicKey().asHex(),
     // In this example, we're signing the batch with the same private key,
     // but the batch can be signed by another party, in which case, the

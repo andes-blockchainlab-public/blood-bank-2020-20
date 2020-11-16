@@ -7,8 +7,11 @@ export const validate = (
   switch (method) {
     case 'create': {
       return [
-        body('id', 'Debe ingresar un id válido').exists(),
-        body('bloodType', 'Debe ingresar un tipo de sangre válido').exists(),
+        body(
+          'hemocomponentId',
+          'Debe ingresar un id de hemocomponente válido'
+        ).exists(),
+        body('patientId', 'Debe ingresar un id de paciente válido').exists(),
       ]
     }
     case 'update': {

@@ -28,10 +28,11 @@ export const createPatient = async function (
     }
     console.log('Llego acá controller 2')
     sendMessage('SAVE_PATIENT', {
-      owner: req.user?.email,
+      author: req.user?.email,
       ips: process.env.ID_IPS,
       id,
       bloodType,
+      transfusions: [],
       name,
     })
     console.log('Llego acá controller 3')
@@ -64,7 +65,7 @@ export const updatePatient = async function (
     }
 
     sendMessage('UPDATE_PATIENT', {
-      owner: req.user?.email,
+      author: req.user?.email,
       ips: process.env.ID_IPS,
       id,
       bloodType,

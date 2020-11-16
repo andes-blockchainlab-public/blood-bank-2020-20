@@ -11,115 +11,42 @@ import * as blockchain from './blockchain'
  * @param req.body.email email del usuario
  * @param req.body.password contraseña del usuario
  */
-export const createHemocomponent = async function (
+export const createTransfusion = async function (
   req: express.Request,
   res: express.Response
 ): Promise<void> {
   validationErrorHandler(req)
   try {
-    const id = req.body.id
-    const bloodType = req.body.bloodType
+    const hemocomponentId = req.body.hemocomponentId
+    const patientId = req.body.patientId
     console.log('Llego acá controller 1')
-    const data = await blockchain.getData(blockchain.getAddress(id))
+    const data = await blockchain.getData(
+      blockchain.getPatientsAddress(patientId)
+    )
     console.log('Llego acá controller data:', data)
-    if (data[0]) {
-      throw new CustomError('Ya existe un hemocomponente con este id', 422)
-    }
-    console.log('Llego acá controller 2')
-    sendMessage('SAVE_HEMOCOMPONENT', {
-      owner: req.user?.email,
-      ips: process.env.ID_IPS,
-      id,
-      bloodType,
-    })
-    console.log('Llego acá controller 3')
-    res.status(200).json({ id, bloodType })
-  } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-    throw err
-  }
-}
-
-/**
- * Actualiza un hemocomponente
- * @param req.body.email email del usuario
- * @param req.body.password contraseña del usuario
- */
-export const updateHemocomponent = async function (
-  req: express.Request,
-  res: express.Response
-): Promise<void> {
-  validationErrorHandler(req)
-  try {
-    const id = req.body.id
-    const bloodType = req.body.bloodType
-
-    const data = await blockchain.getData(blockchain.getAddress(id))
     if (!data[0]) {
+      throw new CustomError('No se encuentra un paciente con este id', 422)
+    }
+    const data2 = await blockchain.getData(
+      blockchain.getHemocomponentsAddress(hemocomponentId)
+    )
+    if (!data2[0]) {
       throw new CustomError(
         'No se encuentra un hemocomponente con este id',
-        404
+        422
       )
     }
-
-    sendMessage('UPDATE_HEMOCOMPONENT', {
-      owner: req.user?.email,
+    console.log('Llego acá controller 2')
+    sendMessage('TRANSFER_HEMOCOMPONENT', {
+      author: req.user?.email,
       ips: process.env.ID_IPS,
-      id,
-      bloodType,
+      hemocomponentId,
+      patientId,
+      adverseReactions: [],
     })
-
-    res.status(200).json({ id, bloodType })
+    console.log('Llego acá controller 3')
+    res.status(200).json({ patientId, hemocomponentId })
   } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-    throw err
-  }
-}
-
-/**
- * Busca todos los hemocomponentes
- * @param req.body.email email del usuario
- * @param req.body.password contraseña del usuario
- */
-export const getHemocomponentById = async function (
-  req: express.Request,
-  res: express.Response
-): Promise<void> {
-  try {
-    const id = req.params.id
-    const data = await blockchain.getData(blockchain.getAddress(id))
-    if (!data[0]) {
-      res.status(200).json(null)
-    }
-    res.status(201).json(data[0])
-  } catch (err) {
-    console.log(err)
-    if (!err.statusCode) {
-      err.statusCode = 500
-    }
-    throw err
-  }
-}
-
-/**
- * Busca todos los hemocomponentes
- * @param req.body.email email del usuario
- * @param req.body.password contraseña del usuario
- */
-export const getAllHemocomponents = async function (
-  req: express.Request,
-  res: express.Response
-): Promise<void> {
-  try {
-    const data = await blockchain.getData(blockchain.getBase())
-    console.log(data)
-    res.status(201).json(data)
-  } catch (err) {
-    console.log(err)
     if (!err.statusCode) {
       err.statusCode = 500
     }

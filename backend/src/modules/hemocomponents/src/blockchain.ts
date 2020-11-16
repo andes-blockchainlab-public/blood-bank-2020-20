@@ -28,6 +28,7 @@ export const sendBlockchain = (method: string, payload: any): void => {
   const address = getAddress(payload?.id)
   console.log('address send bc', address)
   console.log('object id', payload?.id)
+  console.log('payload to send', payload)
   payload = { ...payload, lastUpdated: new Date() }
   payload = { namespace: 'Hemocomponents', Method: method, payload }
 
