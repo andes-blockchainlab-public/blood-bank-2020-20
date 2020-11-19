@@ -3,6 +3,7 @@
   flex-direction: column;
 
   @import "header/header";
+  @import "login-register/login-registro";
 
   .contenido {
     display: flex;
@@ -42,8 +43,6 @@
           .btn {
             margin-top: 0.5em;
             font-size: 1em;
-            padding: 0.5em 3em;
-            @include border-radius(1.5em)
           }
         }
       }

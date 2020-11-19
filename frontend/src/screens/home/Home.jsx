@@ -1,15 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Header from "./header/Header";
 import pc from '../../assets/pc_inicio.png'
 import adversos from '../../assets/eve_adversos.png'
 import inventario from '../../assets/inventario.png'
 import transfusion from '../../assets/res_transfusiones.png'
 import Footer from "../general/footer/Footer";
+import LoginRegistro from "./login-register/LoginRegistro";
 
 const Home = () => {
+
+    const [login, setLogin] = useState(true)
+
+    const cerrarLogin = () => setLogin(false)
+    const abrirLogin = () => setLogin(true)
+
     return (
         <div className="home-screen">
-            <Header/>
+            {login && <LoginRegistro cerrar={cerrarLogin}/>}
+            <Header login={abrirLogin}/>
             <div className="contenido">
                 <div className="fila-inicio">
                     <img className="img-pc" src={pc} alt=""/>
@@ -19,7 +27,7 @@ const Home = () => {
                             <p className="txt-blockchain">Cuida toda tu información desde un mismo lugar y evita que sea
                                 modificada en el tiempo gracias las herramientas innovadoras tecnológicas
                                 disponibles</p>
-                            <button className="btn-header btn">Accede</button>
+                            <button onClick={abrirLogin} className="btn-redondo btn">Accede</button>
                         </div>
                     </div>
                 </div>

@@ -41,6 +41,24 @@ body {
   box-shadow: 0 0 0 0.2rem $azul-oscuro-sombra;
 }
 
+.btn-redondo {
+  height: fit-content;
+  background-color: $azul-oscuro;
+  color: white;
+  font-family: 'Open Sans';
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  padding: 0.5em 3em;
+  @include border-radius(1.5em)
+}
+
+.btn-redondo:focus {
+  border-color: $azul-oscuro-borde;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem $azul-oscuro-sombra;
+}
+
 .bold {
   font-weight: 700;
 }

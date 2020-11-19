@@ -1,0 +1,98 @@
+.fondo-dialogo-login {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1300;
+  position: fixed;
+  background-color: rgba(20, 34, 115, 0.4);
+  -webkit-tap-highlight-color: transparent;
+  overflow-y: scroll;
+  display: flex;
+
+  .fondo-dialogo-rc {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1300;
+    position: fixed;
+    -webkit-tap-highlight-color: transparent;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialogo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 40vw;
+    width: 100%;
+    background-color: #f8f9fb;
+    border-radius: 50px;
+    padding: 2em;
+    z-index: 1302;
+    margin: auto;
+  }
+
+  .cerrar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    margin-right: 2vh;
+    margin-top: 1vh;
+    cursor: pointer;
+  }
+
+  .titulo {
+    font-weight: 500;
+    font-size: 2em;
+    color: $azul-oscuro;
+    margin-bottom: 1em;
+  }
+
+  .form-iniciar {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+
+    .columna-campo {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 1.5rem;
+
+      .campo-texto {
+        font-size: 1.2em;
+        font-family: 'Open Sans';
+        font-weight: 600;
+        padding-bottom: 0.8rem;
+        padding-left: 0.5rem;
+        color: #707070;
+      }
+
+      .input-iniciar {
+        border-radius: 1.2rem;
+        font-size: 0.9em;
+        border: solid 3px #c7c7c7;
+        background-color: #ffffff;
+        color: #484848;
+        padding: 0.7rem 1rem;
+      }
+
+      .input-iniciar:focus {
+        border-color: $azul-oscuro-borde;
+        outline: 0;
+        box-shadow: 0 0 0 0.15rem $azul-oscuro-sombra;
+      }
+    }
+
+    .boton-enviar {
+      margin-top: 1em;
+      width: fit-content;
+      align-self: center;
+      font-size: 1em;
+    }
+  }
+}
