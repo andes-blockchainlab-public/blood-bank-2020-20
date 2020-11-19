@@ -1,0 +1,27 @@
+.footer {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  .onda {
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+  }
+
+  .autores {
+    display: flex;
+    flex-direction: column;
+    padding: 5em 2em 1em;
+
+    .autor {
+      color: white;
+      font-size: 1.2em;
+      font-weight: 500;
+      margin: 0.2em 0;
+    }
+  }
+}
