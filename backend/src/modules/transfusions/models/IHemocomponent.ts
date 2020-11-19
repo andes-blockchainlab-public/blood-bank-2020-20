@@ -1,7 +1,7 @@
 import { Document } from 'mongoose'
 
-export default interface IHospital extends Document {
+export default interface IHemocomponent extends Document {
   id: string
-  name: string
+  bloodType: string
   savedInBlockchain: boolean
 }

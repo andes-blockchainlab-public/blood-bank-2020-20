@@ -2,13 +2,26 @@ import { body, ValidationChain, validationResult } from 'express-validator'
 import express from 'express'
 import { Middleware } from 'express-validator/src/base'
 export const validate = (
-  method: 'create'
+  method: 'create' | 'adverse'
 ): Array<ValidationChain | Middleware> => {
   switch (method) {
     case 'create': {
       return [
-        body('id', 'Debe ingresar un id válido').exists(),
-        body('name', 'Debe ingresar un nombre del paciente válido').exists(),
+        body(
+          'hemocomponentId',
+          'Debe ingresar un id de hemocomponente válido'
+        ).exists(),
+        body('patientId', 'Debe ingresar un id de paciente válido').exists(),
+      ]
+    }
+    case 'adverse': {
+      return [
+        body(
+          'hemocomponentId',
+          'Debe ingresar un id de hemocomponente válido'
+        ).exists(),
+        body('patientId', 'Debe ingresar un id de paciente válido').exists(),
+        body('symptom', 'Debe ingresar un síntoma del paciente').exists(),
       ]
     }
   }

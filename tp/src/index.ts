@@ -17,14 +17,16 @@
 
 'use strict'
 
-require('dotenv').config();
+if (process.env.MODE !== 'docker') require('dotenv').config()
 
 import { TransactionProcessor } from 'sawtooth-sdk/processor'
 import { HemocomponentsKeyHandler } from './handler'
 
-console.log(process.env.VALIDATOR)
+console.log('this is the validator', process.env.VALIDATOR)
 
-const transactionProcessor = new TransactionProcessor(process.env.VALIDATOR)
+const transactionProcessor = new TransactionProcessor(
+  process.env.VALIDATOR || 'tcp://localhost:4004'
+)
 
 transactionProcessor.addHandler(new HemocomponentsKeyHandler())
 

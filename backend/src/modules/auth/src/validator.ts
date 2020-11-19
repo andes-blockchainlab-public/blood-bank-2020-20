@@ -50,7 +50,10 @@ export const validate = (
           .matches(/.{8,}$/, 'i')
           .withMessage('La contraseña ser de al menos 8 caracteres'),
         body('name', 'Debe ingresar un nombre').exists(),
-        body('role', 'Debe ingresar un rol de usuario').exists(),
+        body('role', 'Debe ingresar un rol de usuario')
+          .exists()
+          .matches(/\b(?:coordinador|bacteriologo|medico)\b/, 'i')
+          .withMessage('El rol debe ser coordinador, bacteriologo o medico'),
       ]
     }
     case 'confirmNewPassword': {

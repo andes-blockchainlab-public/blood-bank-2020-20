@@ -1,7 +1,7 @@
 {
-  "name": "2matchback",
+  "name": "blood-block-back",
   "version": "1.0.0",
-  "description": "Backend de la aplicación 2Match",
+  "description": "Backend de la aplicación Blood block",
   "main": "index.js",
   "dependencies": {
     "axios": "^0.20.0",
@@ -48,7 +48,7 @@
   "scripts": {
     "lint": "eslint src/ --ext .ts --fix",
     "start": "ts-node --files src/server.ts",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "cross-env NODE_ENV=development nodemon --legacy-watch",
     "bestOption": "go run ./bestOption/main.go ./bestOption/bestOption.go ./bestOption/offers.go",
     "verifier": "cross-env NODE_ENV=verifier ts-node --files src/server.ts",
     "email": "cross-env NODE_ENV=email ts-node --files src/server.ts",

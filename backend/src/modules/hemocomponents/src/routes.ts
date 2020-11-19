@@ -22,6 +22,14 @@ router.post(
   exceptionHandler(hecomponent.createHemocomponent)
 )
 
+// Crear hemocomponente
+router.post(
+  '/tests',
+  validate('tests'),
+  verifyUser,
+  exceptionHandler(hecomponent.addHemocomponentTests)
+)
+
 // Actualizar hemocomponente
 router.put(
   '/',

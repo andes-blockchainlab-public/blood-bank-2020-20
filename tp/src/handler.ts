@@ -35,41 +35,35 @@ const INT_KEY_NAMESPACE = _hash(INT_KEY_FAMILY, 6)
 
 enum Service {
   Hemocomponents,
-  Hospitals,
   Patients,
-  Users,
+  Transfusions,
 }
 
 const getService = (namespace: string): Service => {
   switch (namespace) {
     case 'Hemocomponents':
       return Service.Hemocomponents
-    case 'Hospitals':
-      return Service.Hospitals
     case 'Patients':
       return Service.Patients
-    case 'Users':
-      return Service.Users
+    case 'Transfusions':
+      return Service.Transfusions
   }
   throw new InvalidTransaction(
     `Namespace not in service, current namespace value is: ${namespace}`
   )
 }
 
-const getServiceAddress = (service: Service, asset): string => {
+const getServiceAddress = (service: Service, ipsId: string, asset): string => {
   let prefix = ''
   switch (service) {
     case Service.Hemocomponents:
       prefix = '0001'
       break
-    case Service.Hospitals:
+    case Service.Patients:
       prefix = '0002'
       break
-    case Service.Patients:
+    case Service.Transfusions:
       prefix = '0003'
-      break
-    case Service.Users:
-      prefix = '0004'
       break
   }
   if (!prefix) {
@@ -77,7 +71,8 @@ const getServiceAddress = (service: Service, asset): string => {
       `Service not in list, current value is: ${service}`
     )
   }
-  return INT_KEY_NAMESPACE + prefix + _hash(asset, 60)
+  console.log('ips id', ipsId)
+  return INT_KEY_NAMESPACE + prefix + _hash(ipsId, 4) + _hash(asset, 56)
 }
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const _decodeCbor = (buffer): any =>
@@ -103,6 +98,7 @@ const _setEntry = (context, address, stateValue) => {
 
 const _applySet = (context, address, id, value) => (possibleAddressValues) => {
   let stateValueRep = possibleAddressValues[address]
+  console.log('0', stateValueRep)
 
   let stateValue
   console.log('statevalue', stateValueRep)
@@ -138,7 +134,7 @@ const _applyUpdate = (context, address, id, value) => (
     let stateName = stateValue[id]
     if (!stateName) {
       throw new InvalidTransaction(
-        `Method is "update" but Name already in state, Name: ${id} Value: ${stateName}`
+        `Method is "update" but Name not in state, Name: ${id} Value: ${stateName}`
       )
     }
   } else {
@@ -147,7 +143,173 @@ const _applyUpdate = (context, address, id, value) => (
     )
   }
 
-  stateValue[id] = value
+  stateValue[id] = { ...stateValue[id], ...value }
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyTest = (context, address, id, value) => (possibleAddressValues) => {
+  let stateValueRep = possibleAddressValues[address]
+
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.id
+  delete value.ips
+
+  const hemocomponent = stateValue[id]
+  hemocomponent.pruebas.push(value)
+  hemocomponent.lastUpdated = value.lastUpdated
+  stateValue[id] = hemocomponent
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyTransfusionPatient = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  let stateValueRep = possibleAddressValues[address]
+
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    console.log(stateValue)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.patientId
+  delete value.ips
+
+  const patient = stateValue[id]
+  patient.transfusions.push(value)
+  patient.lastUpdated = value.lastUpdated
+  stateValue[id] = patient
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyTransfusionHemocomponent = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  let stateValueRep = possibleAddressValues[address]
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.hemocomponentId
+  delete value.ips
+
+  const hemocomponent = stateValue[id]
+  hemocomponent.transfusion = value
+  hemocomponent.lastUpdated = value.lastUpdated
+  stateValue[id] = hemocomponent
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyAdverseReactionPatient = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  console.log('entro entro 1.5')
+
+  let stateValueRep = possibleAddressValues[address]
+  console.log('3', stateValueRep)
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.ips
+  delete value.patientId
+
+  const patient = stateValue[id]
+
+  const transfusionId = patient.transfusions.findIndex(
+    (trans) => trans.hemocomponentId === value.hemocomponentId
+  )
+  delete value.hemocomponentId
+
+  const transfusion = patient.transfusions[transfusionId]
+  transfusion.adverseReactions.push(value)
+  patient.lastUpdated = value.lastUpdated
+  patient.transfusions[transfusionId] = patient.transfusions[transfusionId]
+  stateValue[id] = patient
+
+  return _setEntry(context, address, stateValue)
+}
+
+const _applyAdverseReactionHemocomponents = (context, address, id, value) => (
+  possibleAddressValues
+) => {
+  console.log('entro entro 2')
+
+  let stateValueRep = possibleAddressValues[address]
+  console.log('4', stateValueRep)
+  let stateValue
+  if (stateValueRep && stateValueRep.length > 0) {
+    stateValue = cbor.decodeFirstSync(stateValueRep)
+    let stateName = stateValue[id]
+    if (!stateName) {
+      throw new InvalidTransaction(
+        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+      )
+    }
+  } else {
+    throw new InvalidTransaction(
+      `Method is "test" but Name not in state, Name: ${id}`
+    )
+  }
+
+  delete value.hemocomponentId
+  delete value.ips
+  delete value.patientId
+
+  const hemocomponent = stateValue[id]
+  hemocomponent.transfusion.adverseReactions.push(value)
+  hemocomponent.lastUpdated = value.lastUpdated
+  stateValue[id] = hemocomponent
 
   return _setEntry(context, address, stateValue)
 }
@@ -169,13 +331,22 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
     try {
       return _decodeCbor(transactionProcessRequest.payload)
         .catch(_toInternalError)
-        .then((update) => {
+        .then(async (update) => {
           console.log(update)
           //
           // Validate the update
           let id = update.payload?.id
+          let hemocomponentId = update.payload?.hemocomponentId
+          if (hemocomponentId) {
+            id = { hemocomponentId, patientId: update.payload?.patientId }
+          }
           console.log('objectiD', id)
-          if (!id) {
+          let value = update.payload
+          if (value === null || value === undefined) {
+            throw new InvalidTransaction('Value is required')
+          }
+
+          if (!id && !hemocomponentId) {
             throw new InvalidTransaction('Name is required')
           }
 
@@ -184,35 +355,86 @@ export class HemocomponentsKeyHandler extends TransactionHandler {
             throw new InvalidTransaction('Method is required')
           }
 
-          let value = update.payload
-          if (value === null || value === undefined) {
-            throw new InvalidTransaction('Value is required')
-          }
           // value = { ...value, lastUpdated: new Date().toISOString() }
 
           // Determine the action to apply based on the verb
           let actionFn
+          let actionFn2
           if (verb === 'set') {
             actionFn = _applySet
           } else if (verb === 'update') {
             actionFn = _applyUpdate
+          } else if (verb === 'test') {
+            actionFn = _applyTest
+          } else if (verb === 'transfer') {
+            actionFn = _applyTransfusionPatient
+            actionFn2 = _applyTransfusionHemocomponent
+          } else if (verb === 'adverse') {
+            actionFn = _applyAdverseReactionPatient
+            actionFn2 = _applyAdverseReactionHemocomponents
           } else {
             throw new InvalidTransaction(`Method must be set, not ${verb}`)
           }
 
           console.log('namespace', update.namespace)
           const service = getService(update.namespace)
-
-          let address = getServiceAddress(service, id)
+          const ipsId = update.payload?.ips
+          let address
+          if (service === Service.Transfusions) {
+            address = {
+              patientAddress: getServiceAddress(
+                Service.Patients,
+                ipsId,
+                id.patientId
+              ),
+              hemocomponentAddress: getServiceAddress(
+                Service.Hemocomponents,
+                ipsId,
+                id.hemocomponentId
+              ),
+            }
+          } else {
+            address = getServiceAddress(service, ipsId, id)
+          }
           console.log(address)
+          console.log(service)
 
-          // Get the current state, for the key's address:
-          let getPromise = context.getState([address])
+          let actionPromise
+          if (service === Service.Transfusions) {
+            console.log('aquí estoy', actionFn, id, address.patientAddress)
+            let getPromise = context.getState([address.patientAddress])
 
-          // Apply the action to the promise's result:
-          let actionPromise = getPromise.then(
-            actionFn(context, address, id, value)
-          )
+            // Apply the action to the promise's result:
+            await getPromise.then(
+              actionFn(context, address.patientAddress, id.patientId, {
+                ...value,
+              })
+            )
+            console.log('pasa2')
+            getPromise = context.getState([address.hemocomponentAddress])
+
+            actionPromise = getPromise
+              .then(
+                actionFn2(
+                  context,
+                  address.hemocomponentAddress,
+                  id.hemocomponentId,
+                  { ...value }
+                )
+              )
+              .catch((err) => {
+                console.log(err)
+              })
+            console.log('pasa3')
+          } else {
+            // Get the current state, for the key's address:
+            let getPromise = context.getState([address])
+
+            // Apply the action to the promise's result:
+            actionPromise = getPromise.then(
+              actionFn(context, address, id, value)
+            )
+          }
 
           // Validate that the action promise results in the correctly set address:
 
