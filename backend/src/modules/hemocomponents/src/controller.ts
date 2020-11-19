@@ -31,17 +31,16 @@ export const createHemocomponent = async function (
       ips: process.env.ID_IPS,
       id,
       bloodType,
-      pruebas: [],
-      pacienteTransfundido: null,
-      efectosAversos: [],
+      tests: [],
+      transfusion: null,
     })
     console.log('Llego acá controller 3')
-    res.status(200).json({
+    res.status(201).json({
       id,
+      ips: process.env.ID_IPS,
       bloodType,
-      pruebas: [],
-      pacienteTransfundido: null,
-      efectosAversos: null,
+      tests: [],
+      transfusion: null,
     })
   } catch (err) {
     if (!err.statusCode) {
@@ -104,7 +103,7 @@ export const getHemocomponentById = async function (
     if (!data[0]) {
       res.status(200).json(null)
     }
-    res.status(201).json(data[0])
+    res.status(200).json(data[0])
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {
@@ -126,7 +125,7 @@ export const getAllHemocomponents = async function (
   try {
     const data = await blockchain.getData(blockchain.getBase())
     console.log(data)
-    res.status(201).json(data)
+    res.status(200).json(data)
   } catch (err) {
     console.log(err)
     if (!err.statusCode) {
@@ -165,7 +164,7 @@ export const addHemocomponentTests = async function (
       passed,
     })
 
-    res.status(200).json({ id, passed })
+    res.status(201).json({ id, passed })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500

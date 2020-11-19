@@ -45,7 +45,7 @@ export const createTransfusion = async function (
       adverseReactions: [],
     })
     console.log('Llego acá controller 3 T')
-    res.status(200).json({ patientId, hemocomponentId })
+    res.status(201).json({ patientId, hemocomponentId })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
@@ -94,7 +94,7 @@ export const addAdverseReaction = async function (
       symptom,
     })
     console.log('Llego acá controller 3')
-    res.status(200).json({ patientId, hemocomponentId })
+    res.status(201).json({ patientId, hemocomponentId })
   } catch (err) {
     if (!err.statusCode) {
       err.statusCode = 500
