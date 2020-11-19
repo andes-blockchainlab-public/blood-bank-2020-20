@@ -3,6 +3,7 @@ import {BrowserRouter, Route} from 'react-router-dom';
 import CargandoContext from './screens/general/CargandoContext';
 import './screens/general/main.sass';
 import Loading from "./screens/general/Loading";
+import Landing from "./screens/landing/Landing";
 import Home from "./screens/home/Home";
 
 const App = () => {
@@ -15,7 +16,8 @@ const App = () => {
             quitarIndicadorCarga: () => setCargando(false)
         }}>
             <BrowserRouter>
-                <Route exact path="/" component={Home}/>
+                <Route exact path="/" component={Landing}/>
+                <Route exact path="/home" component={Home}/>
             </BrowserRouter>
             {
                 cargando &&

@@ -1,10 +1,12 @@
 import React, {useState, useContext} from 'react';
+import { useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
 import icCerrar from '../../../assets/cerrar.png'
 import CargandoContext from '../../general/CargandoContext';
 
 const LoginRegistro = ({cerrar}) => {
 
+    let history = useHistory()
     let { correrIndicadorCarga, quitarIndicadorCarga } = useContext(CargandoContext)
     const [form, setForm] = useState({
         correo: '',
@@ -13,11 +15,12 @@ const LoginRegistro = ({cerrar}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        correrIndicadorCarga()
+        // correrIndicadorCarga()
+        history.push('/home')
     }
 
     const handleChange = (e) => {
-            setForm({...form, [e.target.name]: e.target.value})
+        setForm({...form, [e.target.name]: e.target.value})
     }
 
     return (

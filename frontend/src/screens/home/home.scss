@@ -2,64 +2,19 @@
   display: flex;
   flex-direction: column;
 
-  @import "header/header";
-  @import "login-register/login-registro";
-
   .contenido {
+    margin: 8em 0 5em;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 2em;
 
-    .fila-inicio {
-      display: flex;
-      justify-content: space-between;
-      width: 80%;
-
-      .img-pc {
-      }
-
-      .columna-texto {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .info {
-          margin: 2em 1em 2em 3em;
-          padding: 1em;
-          text-align: center;
-
-          .blockchain {
-            color: $azul-oscuro;
-            font-weight: 600;
-            font-size: 2em;
-          }
-
-          .txt-blockchain {
-            font-family: 'Open Sans';
-            font-size: 1.5em;
-          }
-
-          .btn {
-            margin-top: 0.5em;
-            font-size: 1em;
-          }
-        }
-      }
+    .titulo {
+      color: $azul-oscuro;
+      font-weight: 600;
     }
-    .grilla-beneficios {
-      margin-top: 1em;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-column-gap: 2em;
 
-      .titulos {
-        color: $azul-oscuro;
-        font-size: 1.7em;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 0.5em;
-      }
+    .grilla-servicios {
+      width: 80%;
     }
   }
 }
