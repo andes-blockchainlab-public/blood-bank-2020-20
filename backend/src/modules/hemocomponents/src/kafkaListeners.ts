@@ -13,10 +13,9 @@ export const activateHemocomponentsKafkaListeners = (): void => {
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 
   receiveMessage('SAVED_HEMOCOMPONENT_BC', async (payload) => {
-    console.log('Logrado', payload?.message?.value)
     if (payload.message.value) {
       const obj = cbor.decodeFirstSync(payload.message?.value)
-      await updateObjectBlockchainStatus(obj, true)
+      console.log('Logrado :D', obj)
     }
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 
