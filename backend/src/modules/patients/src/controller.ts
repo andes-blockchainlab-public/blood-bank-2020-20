@@ -37,7 +37,7 @@ export const createPatient = async function (
     })
     console.log('Llego acá controller 3')
     res
-      .status(200)
+      .status(201)
       .json({ id, bloodType, name, ips: process.env.ID_IPS, transfusions: [] })
   } catch (err) {
     if (!err.statusCode) {
