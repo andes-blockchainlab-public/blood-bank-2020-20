@@ -1,0 +1,6 @@
+.home-screen {
+  display: flex;
+  flex-direction: column;
+
+  @import "header/header";
+}

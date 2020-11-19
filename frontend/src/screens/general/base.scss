@@ -1,0 +1,45 @@
+* {
+  font-family: 'Epilogue';
+  font-weight: 400;
+}
+
+body {
+  background-color: $color-fondo;
+}
+
+.loading-dialog {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3500;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-header {
+  @include border-radius(0.5em);
+  padding: 0.5em 1.8em;
+  height: fit-content;
+  background-color: $azul-oscuro;
+  color: white;
+  font-family: 'Open Sans';
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-header:focus {
+  border-color: $azul-oscuro-borde;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem $azul-oscuro-sombra;
+}
+
+.bold {
+  font-weight: 700;
+}
