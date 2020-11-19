@@ -170,7 +170,7 @@ const _applyTest = (context, address, id, value) => (possibleAddressValues) => {
   delete value.ips
 
   const hemocomponent = stateValue[id]
-  hemocomponent.pruebas.push(value)
+  hemocomponent.tests.push(value)
   hemocomponent.lastUpdated = value.lastUpdated
   stateValue[id] = hemocomponent
 

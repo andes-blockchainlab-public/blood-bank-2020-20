@@ -146,7 +146,8 @@ export const verifyUser = async function (
 
   let userData
   try {
-    userData = await validateToken(token!)
+    console.log('token', token)
+    userData = await validateToken(token!.split(' ')[1])
   } catch (err) {
     console.log(err)
     throw { message: 'Token inválido', statusCode: 401 }

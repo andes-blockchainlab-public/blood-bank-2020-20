@@ -14,7 +14,7 @@ import { activateBCEventListeners } from './util/zeromq'
 if (process.env.NODE_ENV !== 'verifier') {
   const app = express()
 
-  // Import and Set Nuxt.js options
+  // Allow all
   app.use(cors())
 
   app.use(bodyParser.json())

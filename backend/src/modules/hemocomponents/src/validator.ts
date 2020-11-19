@@ -51,6 +51,7 @@ export const verifyUser = async (
   try {
     const headers = new Headers()
     headers.set('Authorization', req.headers['authorization'] as string)
+    console.log(headers)
 
     const response = await fetch(
       `${process.env.BACK_URL!}servicio-transfusion/auth/user`,

@@ -2,10 +2,16 @@ import { body, ValidationChain, validationResult } from 'express-validator'
 import express from 'express'
 import { Middleware } from 'express-validator/src/base'
 export const validate = (
-  method: 'create'
+  method: 'create' | 'update'
 ): Array<ValidationChain | Middleware> => {
   switch (method) {
     case 'create': {
+      return [
+        body('id', 'Debe ingresar un id válido').exists(),
+        body('name', 'Debe ingresar un nombre del paciente válido').exists(),
+      ]
+    }
+    case 'update': {
       return [
         body('id', 'Debe ingresar un id válido').exists(),
         body('name', 'Debe ingresar un nombre del paciente válido').exists(),
