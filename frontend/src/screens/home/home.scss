@@ -2,37 +2,41 @@
   display: flex;
   flex-direction: column;
 
-  .contenido {
-    margin: 8em 0 2em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  @import "./components/patients";
 
-    .titulo {
-      color: $azul-oscuro;
-      font-weight: 600;
-      margin-top: 1.5em;
-    }
+  .contenedor {
+    margin: 9.5em auto 2em;
+    width: 80%;
 
-    .grilla-servicios {
-      width: 80%;
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-column-gap: 2em;
-      grid-row-gap: 1em;
+    .contenido {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
-      .img-seccion {
-        width: 100%;
-        cursor: pointer;
-        grid-column: span 2;
+      .titulo {
+        color: $azul-oscuro;
+        font-weight: 600;
       }
 
-      .img-final-1 {
-        grid-column: 2 / 4;
-      }
+      .grilla-servicios {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-column-gap: 2em;
+        grid-row-gap: 1em;
 
-      .img-final-2 {
-        grid-column: 4 / 6;
+        .img-seccion {
+          width: 100%;
+          cursor: pointer;
+          grid-column: span 2;
+        }
+
+        .img-final-1 {
+          grid-column: 2 / 4;
+        }
+
+        .img-final-2 {
+          grid-column: 4 / 6;
+        }
       }
     }
   }

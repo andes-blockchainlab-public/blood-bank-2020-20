@@ -1,16 +1,16 @@
 import {ERROR} from "./Utils";
-const path = "http:localhost:4000/api/servicio-transfusion/hemocomponents"
+const path = "localhost:4000/api/servicio-transfusion/transfusions"
 const axios = require('axios');
 
-export const login = async (data) => {
+export const create = async (data) => {
     let body = JSON.stringify(
         {
-            email:data.correo,
-            password:data.contrasenia
+            hemocomponentId: data.hemocomponentId,
+            patientId: data.patientId,
         });
     let config = {
         method: 'post',
-        url: `${path}/create`,
+        url: `${path}`,
         headers: {
             'Content-Type': 'application/json'
         },
@@ -25,17 +25,16 @@ export const login = async (data) => {
     }
 }
 
-export const registro = async (data) => {
+export const createAdverseEvent = async (data) => {
     let body = JSON.stringify(
         {
-            email:data.correo,
-            name:data.nombre,
-            role: "coordinador",
-            password:data.contrasenia
+            hemocomponentId: data.hemocomponentId,
+            patientId: data.patientId,
+            symptom: data.symptom
         });
     let config = {
         method: 'post',
-        url: `${path}/create`,
+        url: `${path}/adverse`,
         headers: {
             'Content-Type': 'application/json'
         },

@@ -10,10 +10,11 @@ const Header = ({click, type, name}) => {
             <div className="fila-logo">
                 <h3 className="logo-eps"><span className="bold">Keralty - U. Andes</span></h3>
                 <button onClick={click}
-                        className="btn-header btn-ingresar">{type === 'home' ? 'Cerrar Sesión' : 'Ingresar'}</button>
+                        className="btn-header btn-ingresar">{type === 'home' || type === 'detail' ? 'Cerrar Sesión' : 'Ingresar'}</button>
             </div>
-            <h1 className={"titulo-inicio"}>{type === 'home' ? "¡Bienvenido " + name + "!": 'Blood Block'}</h1>
-            {type === 'home' ? '' : <img className="img-bloques" src={bloques} alt="Bloques"/>}
+            <h1 className={"titulo-inicio"}>{type === 'home' ? "¡Bienvenido " + name + "!" :
+                type === 'detail' ? name : 'Blood Block'}</h1>
+            {type === 'home' || type === 'detail' ? '' : <img className="img-bloques" src={bloques} alt="Bloques"/>}
         </div>
     );
 }
