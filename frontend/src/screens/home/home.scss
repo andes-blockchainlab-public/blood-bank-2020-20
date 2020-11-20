@@ -2,7 +2,11 @@
   display: flex;
   flex-direction: column;
 
-  @import "./components/patients";
+  @import "components/patients/patients";
+  @import "components/transfusion/transfusion";
+  @import "components/adverseEffects/adverse";
+  @import "components/testsPre/pre-transfusion";
+  @import "components/hemocomponents/hemocomponents";
 
   .contenedor {
     margin: 9.5em auto 2em;

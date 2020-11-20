@@ -21,4 +21,8 @@ const Options = ({seleccionar}) => {
     );
 }
 
+Options.propTypes = {
+    seleccionar: PropTypes.func.isRequired,
+};
+
 export default Options;

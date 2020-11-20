@@ -1,8 +1,7 @@
-import {ERROR} from "./Utils";
-const path = "localhost:4000/api/servicio-transfusion/patients"
+const path = "http://localhost:4000/api/servicio-transfusion/patients"
 const axios = require('axios');
 
-export const create = async (data) => {
+export const create = async (data, token) => {
     let body = JSON.stringify(
         {
             id: data.id,
@@ -13,6 +12,7 @@ export const create = async (data) => {
         method: 'post',
         url: `${path}`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         data : body
@@ -22,11 +22,11 @@ export const create = async (data) => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }
 
-export const actualizar = async (data) => {
+export const actualizar = async (data, token) => {
     let body = JSON.stringify(
         {
             id: data.id,
@@ -37,6 +37,7 @@ export const actualizar = async (data) => {
         method: 'put',
         url: `${path}`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         data : body
@@ -46,15 +47,16 @@ export const actualizar = async (data) => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }
 
-export const consultar = async () => {
+export const consultar = async (token) => {
     let config = {
         method: 'get',
         url: `${path}`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         }
     };
@@ -63,15 +65,16 @@ export const consultar = async () => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }
 
-export const consultarPorId = async (data) => {
+export const consultarPorId = async (data, token) => {
     let config = {
         method: 'get',
         url: `${path}/${data.id}`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         }
     };
@@ -80,6 +83,6 @@ export const consultarPorId = async (data) => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }

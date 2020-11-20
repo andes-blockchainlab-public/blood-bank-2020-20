@@ -1,0 +1,115 @@
+.transfusion-detail {
+
+  .fila-inicio {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    margin-bottom: 2em;
+
+    .volver {
+      left: 0;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    .titulo {
+      color: $azul-oscuro;
+      font-weight: 600;
+    }
+  }
+
+  .opciones {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .titulo-seccion {
+    color: $azul-oscuro;
+    font-size: 1.5em;
+    margin-left: 0.2em;
+  }
+
+  .informacion-enviar {
+    margin-top: 2em;
+
+    .form-envio {
+      display: flex;
+      flex-direction: column;
+
+      .grilla-campos {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-column-gap: 3em;
+        grid-row-gap: 1.5em;
+
+        .columna-campo {
+          display: flex;
+          flex-direction: column;
+
+          .campo-texto {
+            font-size: 1.2em;
+            font-family: 'Open Sans';
+            padding-bottom: 0.8rem;
+            margin-right: 2em;
+            padding-left: 0.5rem;
+            color: black;
+          }
+
+          .input-iniciar {
+            background: #FFFFFF;
+            box-shadow: 6px 7px 20px 1px rgba(0, 0, 0, 0.25);
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #484848;
+            border: none;
+            padding: 0.7rem 1rem;
+          }
+
+          .input-iniciar:focus {
+            outline: 0;
+            box-shadow: 6px 7px 20px 1px $azul-oscuro-borde;
+          }
+        }
+      }
+
+      .boton-enviar {
+        margin-top: 2.5em;
+        width: fit-content;
+        font-size: 1em;
+      }
+    }
+  }
+
+  .resultado-informacion {
+    margin-top: 3em;
+
+    .columna-campo {
+      display: flex;
+      flex-direction: column;
+
+      .campo-texto {
+        font-size: 1.2em;
+        font-family: 'Open Sans';
+        padding-bottom: 0.8rem;
+        margin-right: 2em;
+        padding-left: 0.5rem;
+        color: black;
+      }
+
+      .text-area {
+        background: #FFFFFF;
+        box-shadow: 6px 7px 20px 1px rgba(0, 0, 0, 0.25);
+        border-radius: 20px;
+        font-size: 0.9em;
+        color: #484848;
+        border: none;
+        padding: 0.7rem 1rem;
+      }
+
+      .text-area:focus {
+        outline: 0;
+        box-shadow: 6px 7px 20px 1px $azul-oscuro-borde;
+      }
+    }
+  }
+}

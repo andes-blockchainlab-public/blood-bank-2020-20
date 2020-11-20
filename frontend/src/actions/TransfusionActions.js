@@ -1,8 +1,8 @@
 import {ERROR} from "./Utils";
-const path = "localhost:4000/api/servicio-transfusion/transfusions"
+const path = "http://localhost:4000/api/servicio-transfusion/transfusions"
 const axios = require('axios');
 
-export const create = async (data) => {
+export const create = async (data, token) => {
     let body = JSON.stringify(
         {
             hemocomponentId: data.hemocomponentId,
@@ -12,6 +12,7 @@ export const create = async (data) => {
         method: 'post',
         url: `${path}`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         data : body
@@ -25,7 +26,7 @@ export const create = async (data) => {
     }
 }
 
-export const createAdverseEvent = async (data) => {
+export const createAdverseEvent = async (data, token) => {
     let body = JSON.stringify(
         {
             hemocomponentId: data.hemocomponentId,
@@ -36,6 +37,7 @@ export const createAdverseEvent = async (data) => {
         method: 'post',
         url: `${path}/adverse`,
         headers: {
+            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
         },
         data : body

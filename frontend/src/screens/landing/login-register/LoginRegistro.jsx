@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import icCerrar from '../../../assets/cerrar.png'
 import CargandoContext from '../../general/CargandoContext';
 import {registro, login} from "../../../actions/AuthActions"
-import {ERROR} from "../../../actions/Utils";
 
 const LoginRegistro = ({cerrar}) => {
 
@@ -21,24 +20,22 @@ const LoginRegistro = ({cerrar}) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         correrIndicadorCarga()
-        if (loginSelected){
+        if (loginSelected) {
             let res = await login(form)
-            if (res === ERROR) {
-                quitarIndicadorCarga()
-                alert("Error con el registro")
-            }
+            quitarIndicadorCarga()
+            if (res.error)
+                alert(res.message)
             else {
-                quitarIndicadorCarga()
+                sessionStorage.setItem('token', res.token)
                 history.push('/home')
             }
         } else {
             let res = await registro(form)
-            if (res === ERROR) {
-                quitarIndicadorCarga()
-                alert("Error con el registro")
-            }
+            quitarIndicadorCarga()
+            if (res.error)
+                alert(res.message)
             else {
-                quitarIndicadorCarga()
+                sessionStorage.setItem('token', res.token)
                 history.push('/home')
             }
         }
