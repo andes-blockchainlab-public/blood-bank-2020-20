@@ -1,22 +1,47 @@
 import React, {useState, useContext} from 'react';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import PropTypes from 'prop-types';
 import icCerrar from '../../../assets/cerrar.png'
 import CargandoContext from '../../general/CargandoContext';
+import {registro, login} from "../../../actions/AuthActions"
+import {ERROR} from "../../../actions/Utils";
 
 const LoginRegistro = ({cerrar}) => {
 
     let history = useHistory()
-    let { correrIndicadorCarga, quitarIndicadorCarga } = useContext(CargandoContext)
+    let {correrIndicadorCarga, quitarIndicadorCarga} = useContext(CargandoContext)
     const [form, setForm] = useState({
+        nombre: '',
         correo: '',
         contrasenia: ''
     })
 
-    const handleSubmit = (e) => {
+    const [loginSelected, setLoginSelected] = useState(true)
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        // correrIndicadorCarga()
-        history.push('/home')
+        correrIndicadorCarga()
+        if (loginSelected){
+            let res = await login(form)
+            if (res === ERROR) {
+                quitarIndicadorCarga()
+                alert("Error con el registro")
+            }
+            else {
+                quitarIndicadorCarga()
+                history.push('/home')
+            }
+        } else {
+            let res = await registro(form)
+            if (res === ERROR) {
+                quitarIndicadorCarga()
+                alert("Error con el registro")
+            }
+            else {
+                quitarIndicadorCarga()
+                history.push('/home')
+            }
+        }
     }
 
     const handleChange = (e) => {
@@ -28,8 +53,15 @@ const LoginRegistro = ({cerrar}) => {
             <div className="fondo-dialogo-rc" onClick={cerrar}/>
             <div className="dialogo">
                 <img onClick={cerrar} className="cerrar" src={icCerrar} alt="Cerrar"/>
-                <h1 className="titulo">Iniciar Sesión</h1>
+                <h1 className="titulo">{loginSelected ? "Iniciar Sesión" : "Regístrate"}</h1>
                 <form className="form-iniciar" onSubmit={handleSubmit}>
+                    {!loginSelected && <div className="columna-campo">
+                        <label className="campo-texto" htmlFor="nombre">Nombre</label>
+                        <input required className="input-iniciar" name="nombre" type="text"
+                               value={form.nombre}
+                               maxLength={150}
+                               onChange={handleChange}/>
+                    </div>}
                     <div className="columna-campo">
                         <label className="campo-texto" htmlFor="correo">Correo electrónico</label>
                         <input required className="input-iniciar" name="correo" type="email"
@@ -44,6 +76,8 @@ const LoginRegistro = ({cerrar}) => {
                                maxLength={20}
                                onChange={handleChange}/>
                     </div>
+                    <p onClick={() => setLoginSelected(!loginSelected)}
+                       className="btn-registro">{loginSelected ? "No tienes una cuenta, regístrate acá" : "Ya tienes una cuenta, accede acá"}</p>
                     <button type="submit" className="btn-redondo boton-enviar">Ingresar</button>
                 </form>
             </div>

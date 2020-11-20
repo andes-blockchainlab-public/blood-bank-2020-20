@@ -8,7 +8,7 @@ const Header = ({click, type, name}) => {
         <div className="header-home">
             <img className="ondas" src={ondas} alt="Ondas"/>
             <div className="fila-logo">
-                <h3 className="logo-eps"><span className="bold">EPS</span> Sanitas</h3>
+                <h3 className="logo-eps"><span className="bold">Keralty - U. Andes</span></h3>
                 <button onClick={click}
                         className="btn-header btn-ingresar">{type === 'home' ? 'Cerrar Sesión' : 'Ingresar'}</button>
             </div>
