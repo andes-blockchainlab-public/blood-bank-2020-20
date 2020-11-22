@@ -36,6 +36,14 @@ export const createTransfusion = async function (
         422
       )
     }
+    const hemocomponent = data2[0]
+    if (hemocomponent.transfusion) {
+      throw new CustomError(
+        'El hemocomponente ya se encuentra transfundido',
+        422
+      )
+    }
+
     console.log('Llego acá controller 2')
     sendMessage('TRANSFER_HEMOCOMPONENT', {
       author: req.user?.email,
@@ -82,6 +90,19 @@ export const addAdverseReaction = async function (
     if (!data2[0]) {
       throw new CustomError(
         'No se encuentra un hemocomponente con este id',
+        422
+      )
+    }
+    const hemocomponent = data2[0]
+    if (!hemocomponent.transfusion) {
+      throw new CustomError(
+        'El hemocomponente no se encuentra transfundido',
+        422
+      )
+    }
+    if (hemocomponent.transfusion.patientId !== patientId) {
+      throw new CustomError(
+        'El hemocomponente no se encuentra transfundido a este paciente',
         422
       )
     }

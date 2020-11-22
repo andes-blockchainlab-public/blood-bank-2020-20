@@ -227,11 +227,16 @@ const _applyTransfusionHemocomponent = (context, address, id, value) => (
       `Method is "test" but Name not in state, Name: ${id}`
     )
   }
+  const hemocomponent = stateValue[id]
+  if (hemocomponent.transfusion) {
+    throw new InvalidTransaction(
+      `El hemocomponente ya se encuentra transfundido`
+    )
+  }
 
   delete value.hemocomponentId
   delete value.ips
 
-  const hemocomponent = stateValue[id]
   hemocomponent.transfusion = value
   hemocomponent.lastUpdated = value.lastUpdated
   stateValue[id] = hemocomponent
