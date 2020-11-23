@@ -362,6 +362,13 @@ export const swaggerDocument = {
           '401': {
             description: 'Token inválido',
           },
+          '404': {
+            description:
+              'No se encuentra el hemocomponente o paciente con los ids indicados',
+          },
+          '422': {
+            description: 'El hemocomponente ya se encuentra transfundido',
+          },
         },
       },
     },
@@ -388,6 +395,10 @@ export const swaggerDocument = {
           },
           '401': {
             description: 'Token inválido',
+          },
+          '404': {
+            description:
+              'No se encuentra el hemocomponente o paciente con los ids indicados',
           },
         },
       },

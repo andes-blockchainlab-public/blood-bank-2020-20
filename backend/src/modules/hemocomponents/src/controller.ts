@@ -156,6 +156,13 @@ export const addHemocomponentTests = async function (
         404
       )
     }
+    const hemocomponent = data[0]
+    if (hemocomponent.transfusion) {
+      throw new CustomError(
+        'El hemocomponente ya se encuentra transfundido',
+        422
+      )
+    }
 
     sendMessage('ADDED_TEST_HEMOCOMPONENT', {
       author: req.user?.email,

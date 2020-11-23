@@ -189,12 +189,12 @@ const _applyTransfusionPatient = (context, address, id, value) => (
     let stateName = stateValue[id]
     if (!stateName) {
       throw new InvalidTransaction(
-        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+        `Method is "transfer patient" but Name not in state, Name: ${id} Value: ${stateName}`
       )
     }
   } else {
     throw new InvalidTransaction(
-      `Method is "test" but Name not in state, Name: ${id}`
+      `Method is "transfer patient" but Name not in state, Name: ${id}`
     )
   }
 
@@ -219,19 +219,24 @@ const _applyTransfusionHemocomponent = (context, address, id, value) => (
     let stateName = stateValue[id]
     if (!stateName) {
       throw new InvalidTransaction(
-        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+        `Method is "transfer hemocomponent" but Name not in state, Name: ${id} Value: ${stateName}`
       )
     }
   } else {
     throw new InvalidTransaction(
-      `Method is "test" but Name not in state, Name: ${id}`
+      `Method is "transfer hemocomponent" but Name not in state, Name: ${id}`
+    )
+  }
+  const hemocomponent = stateValue[id]
+  if (hemocomponent.transfusion) {
+    throw new InvalidTransaction(
+      `El hemocomponente ya se encuentra transfundido`
     )
   }
 
   delete value.hemocomponentId
   delete value.ips
 
-  const hemocomponent = stateValue[id]
   hemocomponent.transfusion = value
   hemocomponent.lastUpdated = value.lastUpdated
   stateValue[id] = hemocomponent
@@ -252,12 +257,12 @@ const _applyAdverseReactionPatient = (context, address, id, value) => (
     let stateName = stateValue[id]
     if (!stateName) {
       throw new InvalidTransaction(
-        `Method is "test" but Name not in state, Name: ${id} Value: ${stateName}`
+        `Method is "adverse" but Name not in state, Name: ${id} Value: ${stateName}`
       )
     }
   } else {
     throw new InvalidTransaction(
-      `Method is "test" but Name not in state, Name: ${id}`
+      `Method is "adverse" but Name not in state, Name: ${id}`
     )
   }
 

@@ -4,7 +4,7 @@ import { sendBlockchain } from './blockchain'
 // import { updateObjectBlockchainStatus } from './queries'
 
 export const activateTransfusionsKafkaListeners = (): void => {
-  receiveMessage('TRANSFER_HEMOCOMPONENT', async (payload) => {
+  receiveMessage('TRANSFERED_HEMOCOMPONENT', async (payload) => {
     console.log('payload1', payload?.message?.value)
     if (payload.message.value) {
       console.log(cbor.decodeFirstSync(payload.message?.value))
@@ -15,7 +15,7 @@ export const activateTransfusionsKafkaListeners = (): void => {
     }
   }).catch((e) => console.error(`[example/consumer] ${e.message}`, e))
 
-  receiveMessage('TRANSFER_HEMOCOMPONENT_BC', async (payload) => {
+  receiveMessage('TRANSFERED_HEMOCOMPONENT_BC', async (payload) => {
     console.log('Logrado', payload?.message?.value)
     /* if (payload.message.value) {
       const obj = cbor.decodeFirstSync(payload.message?.value)

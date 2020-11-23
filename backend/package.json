@@ -12,7 +12,7 @@
     "cross-env": "^7.0.2",
     "cross-fetch": "^3.0.4",
     "dotenv": "^8.2.0",
-    "exceljs": "^4.0.1",
+    "exceljs": "^4.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.4.1",
     "jsonwebtoken": "^8.5.1",
@@ -50,11 +50,8 @@
     "lint": "eslint src/ --ext .ts --fix",
     "start": "ts-node --files src/server.ts",
     "dev": "cross-env NODE_ENV=development nodemon --legacy-watch",
-    "bestOption": "go run ./bestOption/main.go ./bestOption/bestOption.go ./bestOption/offers.go",
-    "verifier": "cross-env NODE_ENV=verifier ts-node --files src/server.ts",
-    "email": "cross-env NODE_ENV=email ts-node --files src/server.ts",
     "build": "ttsc && babel dist -d dist",
-    "deploy": "deploy.sh"
+    "upload": "ts-node ./src/util/dataUpload"
   },
   "husky": {
     "hooks": {
