@@ -1,3 +1,5 @@
+import {ERROR} from "./Utils";
+
 const path = "http://localhost:4000/api/servicio-transfusion/auth"
 const axios = require('axios');
 
@@ -19,7 +21,10 @@ export const login = async (data) => {
         let res = await axios(config)
         return res.data
     } catch (e) {
-        return {...e.response.data, error: true}
+        if (e.response)
+            return {...e.response.data, error: true}
+        else
+            return ERROR
     }
 }
 
@@ -43,6 +48,9 @@ export const registro = async (data) => {
         let res = await axios(config)
         return res.data
     } catch (e) {
-        return {...e.response.data, error: true}
+        if (e.response)
+            return {...e.response.data, error: true}
+        else
+            return ERROR
     }
 }

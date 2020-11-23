@@ -1,1 +1,1 @@
-export const ERROR = "ERROR"
+export const ERROR = {error: true, message: "Sin conexión al servidor"}

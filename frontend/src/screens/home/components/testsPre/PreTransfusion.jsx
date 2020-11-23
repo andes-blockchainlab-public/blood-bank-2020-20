@@ -8,15 +8,17 @@ const PreTransfusion = ({volver}) => {
     let {correrIndicadorCarga, quitarIndicadorCarga} = useContext(CargandoContext)
     const [form, setForm] = useState({
         hemocomponentId: '',
-        passed: ''
+        passed: false
     })
     const handleSubmit = async (e) => {
         e.preventDefault()
+        let formEnvio = {...form, passed: form.passed === 'si'}
+        debugger
         let session = sessionStorage.getItem('token')
         if (!session)
             return alert("Necesitas autenticarte para realizar la transacción")
         correrIndicadorCarga()
-        let res = await agregarPruebaPreTransfusional(form, session)
+        let res = await agregarPruebaPreTransfusional(formEnvio, session)
         quitarIndicadorCarga()
         setForm({...form, respuesta: JSON.stringify(res, undefined, 4)})
     }
@@ -35,7 +37,7 @@ const PreTransfusion = ({volver}) => {
                 </button>
             </div>
             <div className="informacion-enviar">
-                <h3 className="titulo-seccion">Datos del evento adverso</h3>
+                <h3 className="titulo-seccion">Datos de la prueba pre transfusional</h3>
                 <form className="form-envio" onSubmit={handleSubmit}>
                     <div className="grilla-campos">
                         <div className="columna-campo">
@@ -47,10 +49,11 @@ const PreTransfusion = ({volver}) => {
                         </div>
                         <div className="columna-campo">
                             <label className="campo-texto" htmlFor="passed">¿Pasaron las pruebas?</label>
-                            <input required className="input-iniciar" name="passed" type="text"
-                                   value={form.passed}
-                                   maxLength={150}
-                                   onChange={handleChange}/>
+                            <select onChange={handleChange} className="input-iniciar" name="passed" required>
+                                <option selected disabled value={''}>Escoge...</option>
+                                <option value={'si'}>Si</option>
+                                <option value={'no'}>No</option>
+                            </select>
                         </div>
                     </div>
                     <button type="submit"

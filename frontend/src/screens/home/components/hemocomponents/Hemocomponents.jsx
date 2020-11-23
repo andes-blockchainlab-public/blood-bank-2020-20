@@ -29,7 +29,7 @@ const Hemocomponents = ({volver}) => {
                 res = await consultarPorId(form, session)
                 break
             default:
-                res = await consultar(form, session)
+                res = await consultar(session)
         }
         quitarIndicadorCarga()
         setForm({...form, respuesta: JSON.stringify(res, undefined, 4)})

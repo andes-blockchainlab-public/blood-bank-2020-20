@@ -31,7 +31,7 @@ const Transfusion = ({volver}) => {
             </div>
             <div className="opciones">
                 <button
-                        className="btn-acciones btn-header">Crear
+                        className="btn-acciones btn-header">Agregar
                     transfusión
                 </button>
             </div>
@@ -55,7 +55,7 @@ const Transfusion = ({volver}) => {
                         </div>
                     </div>
                     <button type="submit"
-                            className="btn-redondo boton-enviar">Crear</button>
+                            className="btn-redondo boton-enviar">Agregar</button>
                 </form>
             </div>
             <div className="resultado-informacion">

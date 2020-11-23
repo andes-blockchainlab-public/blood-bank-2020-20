@@ -60,6 +60,7 @@ export const updatePatient = async function (
   try {
     const id = req.body.id
     const bloodType = req.body.bloodType
+    const name = req.body.name
 
     const data = await blockchain.getData(blockchain.getAddress(id))
     if (!data[0]) {
@@ -71,6 +72,7 @@ export const updatePatient = async function (
       ips: process.env.ID_IPS,
       id,
       bloodType,
+      name,
     })
 
     res.status(200).json({ id, bloodType })
