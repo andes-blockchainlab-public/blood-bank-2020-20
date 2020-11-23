@@ -9,10 +9,9 @@ import Users from '../modules/auth/models/users'
 import { initDB } from './mongoose'
 import { sendBlockchain } from './blockchain'
 
-/** 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
-}*/
+}
 
 export const uploadInfo = async (): Promise<void> => {
   console.log(process.env.MONGO_URI)
@@ -47,6 +46,7 @@ export const uploadInfo = async (): Promise<void> => {
   }
 
   await Users.insertMany(users)
+  await sleep(1000)
 
   console.log('step 2')
 
@@ -80,7 +80,7 @@ export const uploadInfo = async (): Promise<void> => {
   console.log('pre hemocomponents', hemocomponents)
 
   await sendBlockchain('Hemocomponents', 'set', hemocomponents)
-  //await Sites.bulkCreate(sitesData)
+  await sleep(1000)
 
   console.log('Step 3')
 
@@ -115,7 +115,99 @@ export const uploadInfo = async (): Promise<void> => {
   console.log('pre pacientes', patients)
 
   await sendBlockchain('Patients', 'set', patients)
-  //await Sites.bulkCreate(sitesData)
+  await sleep(1000)
+
+  console.log('Step 4')
+
+  const tests: {
+    id: string
+    ips: string
+    passed: boolean
+    lastUpdated: string
+  }[] = []
+
+  const testsE = workbook.worksheets[3]
+  for (let i = 1; i < testsE.actualRowCount; i++) {
+    const row: Excel.Row = testsE.getRow(i + 1)
+    const id = row.getCell(1).text.trim()
+    const passed = row.getCell(2).text.trim() === 'true'
+
+    tests.push({
+      id,
+      ips: process.env.ID_IPS!,
+      passed,
+      lastUpdated: new Date().toISOString(),
+    })
+  }
+
+  console.log('pre tests', tests)
+
+  await sendBlockchain('Hemocomponents', 'test', tests)
+  await sleep(1000)
+
+  console.log('Step 5')
+
+  const transfusions: {
+    author: string
+    ips: string
+    hemocomponentId: string
+    patientId: string
+    adverseReactions: []
+    lastUpdated: string
+  }[] = []
+
+  const transfusionE = workbook.worksheets[4]
+  for (let i = 1; i < transfusionE.actualRowCount; i++) {
+    const row: Excel.Row = transfusionE.getRow(i + 1)
+    const hemocomponentId = row.getCell(1).text.trim()
+    const patientId = row.getCell(2).text.trim()
+
+    transfusions.push({
+      author: 'El autor',
+      ips: process.env.ID_IPS!,
+      hemocomponentId,
+      patientId,
+      adverseReactions: [],
+      lastUpdated: new Date().toISOString(),
+    })
+  }
+
+  console.log('pre transfusión', transfusions)
+
+  await sendBlockchain('Transfusions', 'transfer', transfusions)
+  await sleep(1000)
+
+  console.log('Step 5')
+
+  const adverseEvents: {
+    author: string
+    ips: string
+    hemocomponentId: string
+    patientId: string
+    symptom: string
+    lastUpdated: string
+  }[] = []
+
+  const adverseEventsE = workbook.worksheets[5]
+  for (let i = 1; i < adverseEventsE.actualRowCount; i++) {
+    const row: Excel.Row = adverseEventsE.getRow(i + 1)
+    const hemocomponentId = row.getCell(1).text.trim()
+    const patientId = row.getCell(2).text.trim()
+    const symptom = row.getCell(3).text.trim()
+
+    adverseEvents.push({
+      author: 'El autor',
+      ips: process.env.ID_IPS!,
+      hemocomponentId,
+      patientId,
+      symptom,
+      lastUpdated: new Date().toISOString(),
+    })
+  }
+
+  console.log('pre evento adverso', adverseEvents)
+
+  await sendBlockchain('Transfusions', 'adverse', adverseEvents)
 
   console.log('Finish')
 }
