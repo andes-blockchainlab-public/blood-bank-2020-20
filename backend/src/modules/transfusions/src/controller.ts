@@ -45,7 +45,7 @@ export const createTransfusion = async function (
     }
 
     console.log('Llego acá controller 2')
-    sendMessage('TRANSFER_HEMOCOMPONENT', {
+    sendMessage('TRANSFERED_HEMOCOMPONENT', {
       author: req.user?.email,
       ips: process.env.ID_IPS,
       hemocomponentId,
