@@ -22,7 +22,7 @@ export const create = async (data, token) => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }
 
@@ -47,6 +47,6 @@ export const createAdverseEvent = async (data, token) => {
         return res.data
     } catch (e) {
         console.log(e)
-        return ERROR
+        return e.response
     }
 }
