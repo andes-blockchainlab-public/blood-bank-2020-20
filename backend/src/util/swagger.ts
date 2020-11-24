@@ -285,7 +285,7 @@ export const swaggerDocument = {
         tags: ['patients'],
         summary: 'Lista todos los pacientes',
         description: 'Busca todos los pacientes',
-        operationId: 'findAllHPatients',
+        operationId: 'findAllPatients',
         produces: ['application/json'],
         security: [{ Bearer: [] }],
         responses: {
@@ -399,6 +399,40 @@ export const swaggerDocument = {
           '404': {
             description:
               'No se encuentra el hemocomponente o paciente con los ids indicados',
+          },
+        },
+      },
+    },
+    '/upload': {
+      post: {
+        tags: ['Cargar datos'],
+        summary: 'Cargar datos',
+        description: 'Carga datos de la aplicación',
+        operationId: 'uploadData',
+        produces: ['application/json'],
+        consumes: ['multipart/form-data'],
+        security: [{ Bearer: [] }],
+        requestBody: {
+          content: {
+            'multipart/form-data': {
+              schema: {
+                type: 'object',
+                properties: {
+                  file: { type: 'string', format: 'binary' },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Creado con éxito',
+          },
+          '401': {
+            description: 'Token inválido',
+          },
+          '422': {
+            description: 'Ya existe un paciente con este id',
           },
         },
       },
