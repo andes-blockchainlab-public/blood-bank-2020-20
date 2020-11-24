@@ -10,7 +10,7 @@ function Patients({volver}) {
     const [form, setForm] = useState({
         id: '',
         name: '',
-        bloodtype: '',
+        bloodType: '',
         respuesta: ''
     })
     const handleSubmit = async (e) => {
@@ -83,9 +83,9 @@ function Patients({volver}) {
                                    onChange={handleChange}/>
                         </div>}
                         {cambiar.includes(selected) && <div className="columna-campo">
-                            <label className="campo-texto" htmlFor="bloodtype">Tipo de sangre</label>
-                            <input required className="input-iniciar" name="bloodtype" type="text"
-                                   value={form.bloodtype}
+                            <label className="campo-texto" htmlFor="bloodType">Tipo de sangre</label>
+                            <input required className="input-iniciar" name="bloodType" type="text"
+                                   value={form.bloodType}
                                    maxLength={150}
                                    onChange={handleChange}/>
                         </div>}
@@ -99,7 +99,7 @@ function Patients({volver}) {
                 <h3 className="titulo-seccion">Resultado del API</h3>
                 <div className="columna-campo">
                     <label className="campo-texto" htmlFor="nombre">Respuesta</label>
-                    <textarea disabled className="text-area" name="bloodtype" rows={14}
+                    <textarea disabled className="text-area" name="bloodType" rows={14}
                               value={form.respuesta}/>
                 </div>
             </div>

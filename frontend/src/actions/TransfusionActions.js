@@ -1,4 +1,3 @@
-import {ERROR} from "./Utils";
 const path = "http://localhost:4000/api/servicio-transfusion/transfusions"
 const axios = require('axios');
 

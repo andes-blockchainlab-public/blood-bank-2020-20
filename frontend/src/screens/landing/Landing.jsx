@@ -35,9 +35,9 @@ const Landing = () => {
                     <h4 className="titulos">Resultados<br/>Transfusiones</h4>
                     <h4 className="titulos">Manejo<br/>Inventario</h4>
                     <h4 className="titulos">Eventos<br/>Adversos</h4>
-                    <img src={transfusion} alt="Resultados Transfusiones"/>
-                    <img src={inventario} alt="Manejo Inventario"/>
-                    <img src={adversos} alt="Eventos Adversos"/>
+                    <img className="img-land" src={transfusion} alt="Resultados Transfusiones"/>
+                    <img className="img-land" src={inventario} alt="Manejo Inventario"/>
+                    <img className="img-land" src={adversos} alt="Eventos Adversos"/>
                 </div>
             </div>
             <Footer/>

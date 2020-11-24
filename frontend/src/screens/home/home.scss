@@ -1,6 +1,7 @@
 .home-screen {
   display: flex;
   flex-direction: column;
+  font-size: 16px;
 
   @import "components/patients/patients";
   @import "components/transfusion/transfusion";
@@ -43,5 +44,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (min-width: 1600px){
+  .landing-screen {
+    font-size: 1.3vw;
   }
 }

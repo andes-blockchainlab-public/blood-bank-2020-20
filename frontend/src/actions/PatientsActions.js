@@ -6,7 +6,7 @@ export const create = async (data, token) => {
         {
             id: data.id,
             name: data.name,
-            bloodtype: data.bloodtype
+            bloodType: data.bloodType
         });
     let config = {
         method: 'post',
