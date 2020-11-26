@@ -8,6 +8,7 @@
   @import "components/adverseEffects/adverse";
   @import "components/testsPre/pre-transfusion";
   @import "components/hemocomponents/hemocomponents";
+  @import "components/uploadFiles/upload-file";
 
   .contenedor {
     margin: 9.5em auto 2em;
@@ -25,23 +26,22 @@
 
       .grilla-servicios {
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         grid-column-gap: 2em;
         grid-row-gap: 1em;
 
         .img-seccion {
           width: 100%;
           cursor: pointer;
-          grid-column: span 2;
         }
 
-        .img-final-1 {
-          grid-column: 2 / 4;
-        }
-
-        .img-final-2 {
-          grid-column: 4 / 6;
-        }
+        //.img-final-1 {
+        //  grid-column: 2 / 4;
+        //}
+        //
+        //.img-final-2 {
+        //  grid-column: 4 / 6;
+        //}
       }
     }
   }

@@ -8,6 +8,7 @@ import Patients from "./components/patients/Patients";
 import Transfusion from "./components/transfusion/Transfusion";
 import AdverseEffects from "./components/adverseEffects/AdverseEffects";
 import PreTransfusion from "./components/testsPre/PreTransfusion";
+import UploadFile from "./components/uploadFiles/UploadFile";
 
 const Home = () => {
     let history = useHistory()
@@ -41,6 +42,7 @@ const Home = () => {
                         actual === 'transfusion' ? <Transfusion volver={volver}/> :
                             actual === 'adverse' ? <AdverseEffects volver={volver}/> :
                                 actual === 'tests' ? <PreTransfusion volver={volver}/> :
+                                    actual === 'upload' ? <UploadFile volver={volver}/> :
                                     <Options seleccionar={cambiarEstadoNombre}/>}
             </div>
             <Footer/>
